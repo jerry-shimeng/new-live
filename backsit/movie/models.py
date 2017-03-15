@@ -30,6 +30,8 @@ class MovieImages(models.Model):
     id = models.AutoField(primary_key=True)
     movie = models.ForeignKey(MovieDetail, null=True)
     image = models.CharField(max_length=500)
+    # 图片类型 1：海报  2：剧照
+    # img_type = models.SmallIntegerField(default=1, null=True)
 
     class Meta:
         db_table = 'movie_images'
