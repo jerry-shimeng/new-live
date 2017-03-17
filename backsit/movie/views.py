@@ -87,3 +87,20 @@ class DetailView(generic.DetailView):
     model = MovieDetail
     template_name = "detail.html"
     context_object_name = "model"
+
+    def get_detail(self, request, pk):
+        model = MovieDetail.objects.get(pk=pk)
+        m = model_to_dict(model)
+        # 获取图片
+        img = MovieImages.objects.get(movie=model.id)
+        m["images"] = model_to_dict(img)
+        m["release_time"] = m["release_time"].strftime("%Y-%m-%d")
+
+        durls = MovieDownloadUrl.objects.filter(movie=model.id)
+        durl = []
+        for d in durls:
+            durl.append(model_to_dict(d))
+
+        m["download"] = durl
+        print(m)
+        return render(request, self.template_name, {"model": m})
