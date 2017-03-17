@@ -15,37 +15,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             window.scrollTo(0, 1);
         }
     </script>
-    <!--flexslider-css-->
-    <!--bootstrap-->
-{#    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">#}
     <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <!--coustom css-->
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
-    <!--fonts-->
-    {% comment %}<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,800italic,800,700italic,700,600,600italic'
-          rel='stylesheet' type='text/css'>{% endcomment %}
-    <!--/fonts-->
-    <!--script-->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <!-- js -->
-    <script src="{% static 'js/bootstrap.js' %}"></script>
-    <!-- js -->
-    <!-- js -->
-    <script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
-    <!--/script-->
-    <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            $(".scroll").click(function (event) {
-                event.preventDefault();
-                $('html,body').animate({scrollTop: $(this.hash).offset().top}, 900);
-            });
-        });
-    </script>
+
     <!--/script-->
 </head>
 <body>
 <div class="header" id="home">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default ">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -56,7 +34,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html"><h1>Stunning</h1><br/><span>Traveling</span></a>
+                <a class="navbar-brand" href="/"><h1>Stunning</h1><br/><span>Traveling</span></a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -66,7 +44,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <li><a href="gallery.html"><span data-hover="T  V">AA</span></a></li>
                     <li><a href="typography.html"><span data-hover="Resource">BB</span></a></li>
                     <li><a href="contact.html"><span data-hover="Contact">CCC</span></a></li>
+                    <li>
+                        <form class="navbar-form navbar-right" role="search" action="{% url 'search' %}" method="get">
+                            <input type="text" class="form-control" placeholder="Search" name="key">
+                            <button type="submit" class="btn btn-default">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </form>
+                    </li>
                 </ul>
+
                 <div class="clearfix"></div>
             </div><!-- /.navbar-collapse -->
             <div class="clearfix"></div>
@@ -75,23 +62,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     <div class="clearfix"></div>
 
-    <div class="index-works">
+    <div class="index-works" id="content">
         <div class="container">
             <div class="row">
                 {% if movie_list %}
                     {% for movie in movie_list %}
-                        <div class="col-sm-6 col-md-4">
+                        <div class="col-sm-6 col-md-4 m-list">
                             <div class="thumbnail">
-                                <figure class="effect-bubba"  >
-                                    <img class="img-responsive" style="z-index: 1"
-                                         src="{% static 'images/we.jpg' %}" alt=""/>
-                                    <figcaption>
-                                        <h4><span class="glyphicon glyphicon-play-circle"></span></h4>
-                                    </figcaption>
-                                </figure>
-                                <div class="caption" style="background-color: white;z-index: 100">
-                                    <h3>{{ movie.name }}</h3>
-                                    <p>{{ movie.about }}</p>
+                                <a href="{% url 'detail' movie.id %}">
+                                    <figure class="effect-bubba">
+                                        <img class="img-responsive img-rounded " src="{{ movie.images.image }}" alt=""/>
+                                        <figcaption>
+                                            <h4><span class="glyphicon glyphicon-play-circle"></span></h4>
+                                        </figcaption>
+                                    </figure>
+                                </a>
+                                <div class="caption">
+                                    <div class="description">
+                                        <p>{{ movie.about }}</p>
+                                    </div>
+                                    <h2>
+                                        <a href="{% url 'detail' movie.id %}">{{ movie.name }}</a>
+                                    </h2>
+                                </div>
+                                <div class="info">
+                                    <span class="info_date info_ico" title="上映时间"><em
+                                            class="glyphicon glyphicon-calendar"></em> {{ movie.release_time }}</span>
+                                    <span class="info_views info_ico" title="浏览次数"><em
+                                            class="glyphicon glyphicon-eye-open"></em> 10688</span>
+                                    <span class="info_comment info_ico" title="豆瓣评分"><em
+                                            class="glyphicon glyphicon-star"></em> 12</span>
+                                    <span class="info_category info_ico" title="类别"><em
+                                            class="glyphicon glyphicon-tag"></em> 国产电影</span>
                                 </div>
                             </div>
                         </div>
@@ -104,9 +106,77 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     </div>
 
+    <!--分页-->
+    <div class="container">
+        <div class="row">
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    {% if pager == 1 %}
+                        <li class="disabled"><a href="javascript:;" aria-label="Previous"><span
+                                aria-hidden="true">&laquo;</span></a></li>
+                    {% else %}
+                        <li class=""><a href="{% url 'page' 1 %}" aria-label="Previous"><span
+                                aria-hidden="true">首页</span></a></li>
+                        <li class=""><a href="{% url 'page' pager|add:-1 %}" aria-label="Previous"><span
+                                aria-hidden="true">&laquo;</span></a></li>
+                    {% endif %}
+
+                    {% for a in 3|make_list %}
+                        {% if pager  > 3 %}
+                            <li class=""><a href="{% url 'page' pager|add:-3 %}">{{ pager|add:-3 }} <span
+                                    class="sr-only">(current)</span></a>
+                            </li>
+                        {% endif %}
+                        {% if pager  > 2 %}
+                            <li class=""><a href="{% url 'page' pager|add:-2 %}">{{ pager|add:-2 }} <span
+                                    class="sr-only">(current)</span></a>
+                            </li>
+                        {% endif %}
+                        {% if pager  > 1 %}
+                            <li class=""><a href="{% url 'page' pager|add:-1 %}">{{ pager|add:-1 }} <span
+                                    class="sr-only">(current)</span></a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="active"><a href="{% url 'page' pager %}">{{ pager }} <span
+                            class="sr-only">(current)</span></a>
+                    </li>
+
+                    {% for a in 3|make_list %}
+                        {% if pager  < total_count|add:-1 %}
+                            <li class=""><a href="{% url 'page' pager|add:1 %}">{{ pager|add:1 }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% endif %}
+                        {% if pager  < total_count|add:-2 %}
+                            <li class=""><a href="{% url 'page' pager|add:2 %}">{{ pager|add:2 }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% endif %}
+                        {% if pager  < total_count|add:-3 %}
+                            <li class=""><a href="{% url 'page' pager|add:3 %}">{{ pager|add:3 }} <span class="sr-only">(current)</span></a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pager == total_count %}
+                        <li class="disabled"><a href="javascript:;" aria-label="Previous"><span
+                                aria-hidden="true">&raquo;</span></a></li>
+                    {% else %}
+                        <li class=""><a href="{% url 'page' pager|add:1 %}" aria-label="Previous"><span
+                                aria-hidden="true">&raquo;</span></a></li>
+                        <li class=""><a href="{% url 'page'  total_count %}" aria-label="Previous"><span
+                                aria-hidden="true">尾页</span></a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <br/>
+        </div>
+    </div>
+
 
     <!--footer-starts-->
-    <div class="footer">
+    <footer class="footer">
         <div class="container">
             <div class="footer-main">
                 <div class="col-md-3 footet-left">
@@ -152,9 +222,46 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
         </div>
         <!---->
-    </div>
+    </footer>
     <!---->
 </div>
 <!---->
+<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<!-- js -->
+<script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
+<script src="//cdn.bootcss.com/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
+<script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
+{#<script type="text/javascript" src="{% static 'js/laypage/laypage.js' %}"></script>#}
+<!--/script-->
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+            $('html,body').animate({scrollTop: $(this.hash).offset().top}, 900);
+        });
+    });
+</script>
+<script>
+    $(function () {
+
+        $('#content').imagesLoaded()
+            .always(function (instance) {
+                {#                console.log('all images loaded');#}
+            })
+            .done(function (instance) {
+                $('#content .row').masonry({
+                    itemSelector: '.m-list',
+                });
+            })
+            .fail(function () {
+                {#                console.log('all images loaded, at least one is broken');#}
+            })
+            .progress(function (instance, image) {
+                {% comment %} var result = image.isLoaded ? 'loaded' : 'broken';
+                 console.log('image is ' + result + ' for ' + image.img.src);{% endcomment %}
+            });
+    });
+</script>
 </body>
 </html>

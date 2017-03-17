@@ -5,9 +5,7 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.template import loader, RequestContext
 from django.views import generic
-
 from movie.models import *
-
 
 # def index(request):
 #     movie_list = MovieDetail.objects.order_by("id")[:10]
@@ -29,21 +27,59 @@ from movie.models import *
 #     return render(request, "detail.html", {"model": model})
 
 
+page_size = 9
+
+
 class IndexView(generic.ListView):
     template_name = "index.html"
     context_object_name = "movie_list"
 
-    def get_queryset(self):
-        list = MovieDetail.objects.order_by("-release_time")[:9]
+    def queryset(self, page=1):
+        list = MovieDetail.objects.order_by("-release_time")[(page - 1) * page_size:page_size * page]
+        r = self.convert_query_set(list)
+        return r
+
+    def index(self, request):
+        return render(request, self.template_name,
+                      {"movie_list": self.queryset(), "total_count": self.get_page_count(), "pager": 1})
+
+    def page(self, request, page):
+
+        if page is None:
+            page = 1
+        page = int(page)
+        r = self.queryset(page)
+        return render(request, self.template_name,
+                      {"movie_list": r, "total_count": self.get_page_count(), "pager": page})
+
+    # 查询结果
+    def search(self, request):
+        key = request.GET.get("key")
+        list = MovieDetail.objects.filter(name__contains=key).order_by("-release_time")[:9]
+
+        r = self.convert_query_set(list)
+        return render(request, "list.html", {"movie_list": r})
+
+    def get_page_count(self):
+        count = MovieDetail.objects.count()
+        a = 1
+        if count % page_size == 0:
+            a = count / page_size
+        else:
+            a = count / page_size + 1
+        return int(a)
+
+    # 模型转换
+    def convert_query_set(self, set):
         r = []
-        for l in list:
+        for l in set:
             m = model_to_dict(l)
-            m["about"] = m["about"][0:20] + "..."
+            m["about"] = m["content"][0:50] + "..."
             # 获取图片
             img = MovieImages.objects.get(movie=l.id)
             m["images"] = model_to_dict(img)
+            m["release_time"] = m["release_time"].strftime("%Y-%m-%d")
             r.append(m)
-        # print(r)
         return r
 
 
