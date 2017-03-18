@@ -1,6 +1,8 @@
 h4, h5, h6,
-h1, h2, h3 {
+h1, h2, h3, div, img {
     margin: 0;
+    padding: 0;
+
 }
 
 ul, ol {
@@ -68,7 +70,17 @@ p, a, span, i {
     margin: 0 6px;
 }
 
-.content-block{
+.content {
+    background-color: white;
+
+}
+
+.content img {
+    width: 100%;
+    padding-left: 13px;
+}
+
+.content-block {
     padding-bottom: 20px;
 }
 
@@ -94,6 +106,18 @@ p, a, span, i {
     color: #999;
 }
 
+.download {
+    margin: 5px 25px 0px 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #999;
+}
+
+.download p {
+    padding-left: 0 !important;
+    margin-left: 0;
+}
+
 /*.container p{
      color: #999;
 }*/
@@ -110,6 +134,28 @@ p, a, span, i {
     padding-bottom: 10px;
     color: black;
 }
+/*--right_side_bar--*/
+.side_bar_box{
+    background: #fff;
+    padding: 15px 10px;
+}
+.side_bar_title{
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 3px solid #71c6c1;
+}
+.side_bar_a{
+    display: inline-block;
+    color: #666;
+    background: #F3F3F3;
+    padding: 5px 10px;
+    margin-bottom: 8px;
+    border-radius: 3px;
+}
+
 
 /*--header-nav--*/
 .navbar-default {
@@ -1399,6 +1445,7 @@ h3.bars {
     font-size: 3em;
     letter-spacing: 3px;
     color: #3382C9;
+    padding-left: 26px;
 }
 
 section#tables h2 {

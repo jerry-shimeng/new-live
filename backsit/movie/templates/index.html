@@ -71,7 +71,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <div class="thumbnail">
                                 <a href="{% url 'detail' movie.id %}">
                                     <figure class="effect-bubba">
-                                        <img class="img-responsive img-rounded " src="{{ movie.images.image }}" alt=""/>
+                                        <img class="img-responsive img-rounded "
+                                             src="{% static 'images/default.jpeg' %}" url="{{ movie.images.image }}"
+                                             alt=""/>
                                         <figcaption>
                                             <h4><span class="glyphicon glyphicon-play-circle"></span></h4>
                                         </figcaption>
@@ -245,16 +247,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script>
     $(function () {
 
+        convert_image();
+
+
         $('#content').imagesLoaded()
             .always(function (instance) {
                 {#                console.log('all images loaded');#}
             })
             .done(function (instance) {
-                $('#content .row').masonry({
-                    itemSelector: '.m-list',
-                });
+                format_image();
             })
             .fail(function () {
+                format_image();
                 {#                console.log('all images loaded, at least one is broken');#}
             })
             .progress(function (instance, image) {
@@ -262,6 +266,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                  console.log('image is ' + result + ' for ' + image.img.src);{% endcomment %}
             });
     });
+
+
+    var convert_image = function () {
+        var imgs = $("#content img");
+
+
+        for (var i = 0; i < imgs.length; i++) {
+            var img = $(imgs[i]);
+            img.attr("src", img.attr("url"));
+        }
+
+        format_image();
+    }
+
+    var format_image = function () {
+        $('#content .row').masonry({
+            itemSelector: '.m-list',
+        });
+    }
+
+
 </script>
 </body>
 </html>
