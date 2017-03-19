@@ -57,10 +57,13 @@ class IndexView(generic.ListView):
 	# 查询结果
 	def search(self, request):
 		key = request.GET.get("key")
+		if key is None:
+			key = ""
 		list = MovieDetail.objects.filter(name__contains=key).order_by("-release_time")[:9]
 		
 		r = self.convert_query_set(list)
-		return render(request, "list.html", {"movie_list": r})
+		
+		return render(request, "list.html", {"movie_list": r, "key": key})
 	
 	def get_page_count(self):
 		count = MovieDetail.objects.count()
