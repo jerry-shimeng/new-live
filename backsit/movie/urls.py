@@ -5,7 +5,7 @@ from movie.restapi import DownloadApiView
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r"/download", DownloadApiView)
+router.register(r"download", DownloadApiView)
 
 urlpatterns = [
 	# url(r"^$", views.index, name="index"),

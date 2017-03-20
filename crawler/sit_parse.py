@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 
 from crawler.db_access import DatabaseAccess
+from crawler.douban_parse import DoubanContentParser
 from crawler.http_utility import HttpUtility
 
 # 使用的解析器
@@ -69,11 +70,16 @@ class WebSitParser:
         div = detail.find("div", class_="entry")
         # 下载地址
         down_links = self.get_download_url(div)
+
+        # 豆瓣上获取详情
+        result = DoubanContentParser(name).start()
+
         #  获取内容
         content, about = self.get_content(div)
-        print(name, time, status, img, content, about, down_links, end="\n \n \n")
+        print(name, time, status, img, content, about, down_links, result, end="\n \n \n")
 
-        self.save(name=name, time=time, tag=status, image=img, content=content, about=about, down_links=down_links)
+        self.save(result, name=name, time=time, tag=status, image_url=img, content=content, about=about,
+                  down_links=down_links)
         pass
 
     def get_download_url(self, div):
@@ -132,7 +138,9 @@ class WebSitParser:
         content = content.replace("电影下载", "").replace("@电影下载", "").replace("在线电影", "").replace("@在线电影", "").replace(
             "@在线电影",
             "").replace(
-            "http://www.lbldy.com", "").replace("http://www.youjiady.com", "").replace("下载地址：", "")
+            "http://www.lbldy.com", "").replace("http://www.youjiady.com", "").replace("下载地址：", "").replace("龙部落",
+                                                                                                            "").replace(
+            "龙太子", "")
 
         return content
 
@@ -142,6 +150,14 @@ class WebSitParser:
             "&tr=http://www.youjiady.com", "")
         return url
 
-    def save(self, **dict):
-        DatabaseAccess.save(dict)
+    def save(self, result, **d_map):
+
+        data_map = {}
+        if result is None:
+            data_map = d_map
+        else:
+            data_map = dict(d_map, **result)
+            pass
+
+        DatabaseAccess.save(data_map)
         pass

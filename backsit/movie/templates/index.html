@@ -81,7 +81,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 </a>
                                 <div class="caption">
                                     <div class="description">
-                                        <p>{{ movie.about }}</p>
+                                        <p>{{ movie.content|slice:"0:50" }}...</p>
                                     </div>
                                     <h2>
                                         <a href="{% url 'detail' movie.id %}">{{ movie.name }}</a>

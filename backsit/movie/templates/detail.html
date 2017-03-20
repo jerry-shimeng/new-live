@@ -73,7 +73,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="row ">
                 <div class="col-md-4"><img src="{{ model.images.image }}" alt=""></div>
                 <div class="col-md-8">
-                    <p>{{ model.content }}</p>
+                    <p>{{ model.about|safe }}</p>
                 </div>
             </div>
 
@@ -81,7 +81,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="row content-block">
                     <h2>{{ model.name }}的剧情简介</h2>
                     <p>
-                        {{ model.about }}
+                        {{ model.content }}
                     </p>
                 </div>
             {% endif %}
@@ -175,6 +175,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="//cdn.bootcss.com/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
 
 <script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer/layer.js' %}"></script>
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $(".scroll").click(function (event) {
@@ -191,15 +192,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     {#    var download = JSON.parse(download_data);#}
 
     $(function () {
-        {#        $("#slider").responsiveSlides({#}
-        {#            auto: true,#}
-        {#            nav: true,#}
-        {#            speed: 500,#}
-        {#            namespace: "callbacks",#}
-        {#            pager: true,#}
-        {#        });#}
-
-
         var urls = initDownloadUrl();
 
         new Vue({
@@ -208,8 +200,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 downloads: urls
             },
         });
-
-
     });
 
 
@@ -222,8 +212,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             if (a.indexOf("pan.baidu.com") > 0) {
                 list.push(a);
             } else if (a.indexOf("ed2k:") >= 0) {
-                var s = "<a href='" + a + "'>迅雷下载</a>";
-                list.push(s);
+                var s = "<a href='" + a + "'>迅雷下载</a>(如不能唤起迅雷，请点此<a href='#' onclick='copy_url()'>复制下载地址</a>，粘贴到迅雷中下载)";
+
+                var url = "<p id='hideurl' style='display:none'>" + a + "</p>"
+
+                list.push(s + url);
             } else if (a.indexOf("http") >= 0) {
                 var s1 = "<a href='" + a + "'>种子下载</a>";
                 list.push(s1);
@@ -232,7 +225,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         }
 
         return list;
-    }
+    };
 
+
+    var copy_url = function () {
+
+        var a = $("#hideurl").html();
+        clipboardData(a);
+    };
+
+    var clipboardData = function (a) {
+
+        if (window.clipboardData && window.clipboardData.setData) {
+            window.clipboardData.setData('text', a);
+        } else {
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-demo', //样式类名
+                closeBtn: 1, //显示关闭按钮
+                title: "浏览器不支持复制功能，请复制以下链接",
+                anim: 1,
+                shadeClose: true, //开启遮罩关闭
+                content: a
+            });
+            $(".layui-layer-content").css("word-wrap", "break-word").css("word-break", "break-all").css("padding", "20px");
+            $(".layui-layer-content").select();
+        }
+
+    }
 </script>
 </html>
