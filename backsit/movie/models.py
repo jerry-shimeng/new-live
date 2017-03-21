@@ -17,6 +17,7 @@ class MovieDetail(models.Model):
     about = models.TextField(null=True)
     content = models.TextField(null=True)
     tag = models.CharField(max_length=100, null=True)
+    area = models.CharField(max_length=100, null=True)
     # movie_type = models.
     status = models.SmallIntegerField(default=1)
     create_time = models.TimeField(auto_created=True, default=django.utils.timezone.now)

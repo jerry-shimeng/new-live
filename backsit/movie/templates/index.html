@@ -90,12 +90,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 <div class="info">
                                     <span class="info_date info_ico" title="上映时间"><em
                                             class="glyphicon glyphicon-calendar"></em> {{ movie.release_time }}</span>
-                                    <span class="info_views info_ico" title="浏览次数"><em
-                                            class="glyphicon glyphicon-eye-open"></em> 10688</span>
+                                    <span class="info_views info_ico" title="评价人数"><em
+                                            class="glyphicon glyphicon-eye-open"></em> {{ movie.rating_sum }}</span>
                                     <span class="info_comment info_ico" title="豆瓣评分"><em
-                                            class="glyphicon glyphicon-star"></em> 12</span>
+                                            class="glyphicon glyphicon-star"></em> {{ movie.rating }}</span>
                                     <span class="info_category info_ico" title="类别"><em
-                                            class="glyphicon glyphicon-tag"></em> 国产电影</span>
+                                            class="glyphicon glyphicon-tag"></em> {{ movie.area }}</span>
                                 </div>
                             </div>
                         </div>

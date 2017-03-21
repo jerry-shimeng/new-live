@@ -38,6 +38,9 @@ class DatabaseAccess:
         else:
             model.rating_sum = 0
 
+        if "area" in data_map.keys():
+            model.area = data_map["area"]
+
         model.release_time = datetime.datetime.strptime(data_map["time"].strip(), "%Y年%m月%d日").date()
         model.tag = data_map["tag"]
         model.status = 1

@@ -120,6 +120,7 @@ class MovieDetail(BaseModel):
     status = IntegerField()
     sub_name = CharField(null=True)
     tag = CharField(null=True)
+    area = CharField(null=True)
 
     class Meta:
         db_table = 'movie_detail'

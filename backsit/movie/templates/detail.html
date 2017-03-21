@@ -235,23 +235,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     };
 
     var clipboardData = function (a) {
-
-        if (window.clipboardData && window.clipboardData.setData) {
-            window.clipboardData.setData('text', a);
-        } else {
-            layer.open({
-                type: 1,
-                skin: 'layui-layer-demo', //样式类名
-                closeBtn: 1, //显示关闭按钮
-                title: "浏览器不支持复制功能，请复制以下链接",
-                anim: 1,
-                shadeClose: true, //开启遮罩关闭
-                content: a
-            });
-            $(".layui-layer-content").css("word-wrap", "break-word").css("word-break", "break-all").css("padding", "20px");
-            $(".layui-layer-content").select();
-        }
-
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-demo', //样式类名
+            closeBtn: 1, //显示关闭按钮
+            title: "浏览器不支持复制功能，请复制以下链接",
+            anim: 1,
+            shadeClose: true, //开启遮罩关闭
+            content: a
+        });
+        $(".layui-layer-content").css("word-wrap", "break-word").css("word-break", "break-all").css("padding", "20px");
+        $(".layui-layer-content").select();
     }
 </script>
 </html>

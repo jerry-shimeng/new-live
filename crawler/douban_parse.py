@@ -1,3 +1,4 @@
+import re
 import traceback
 
 from bs4 import BeautifulSoup
@@ -9,8 +10,10 @@ features = "lxml"
 
 class DoubanContentParser:
     search_url = "https://www.douban.com/search?q=%s"
+    sub_search_url = "https://movie.douban.com/subject_search?search_text=%s"
 
     def __init__(self, name):
+        self.movie_name = name
         self.search_url = self.search_url % name
         pass
 
@@ -21,52 +24,68 @@ class DoubanContentParser:
             traceback.print_exc()
             return None
 
-    def search_result(self):
+    def search_result(self, ):
         html = HttpUtility(self.search_url).get()
         # print(content)
         soup = BeautifulSoup(html, features)
-        result_list = soup.find(class_="result-list").find_all(class_="result")
-        # print(len(result_list))
-        if len(result_list) > 0:
-            for result in result_list:
-                content = result.find(class_="content").find(class_="title")
-                name = content.h3.a.string
-                if content.h3.span.string == "[电影]":
-                    detail_url = content.h3.a["href"]
-                    # print(name, detail_url)
-                    return self.detail_page(detail_url)
+        # print(soup)
+
+        result_list = soup.find(class_="result-list")
+
+        if result_list:
+            seach_list = result_list.find_all(class_="result")
+            if len(seach_list) > 0:
+                for result in seach_list:
+                    content = result.find(class_="content").find(class_="title")
+                    name = content.h3.a.string
+                    if content.h3.span.string == "[电影]" and name.find(self.movie_name) >= 0:
+                        detail_url = content.h3.a["href"]
+                        # print(name, detail_url)
+                        return self.detail_page(detail_url)
+        elif soup.find(id="content"):
+            # 找table
+            tables = soup.find(id="content").find_all("table")
+            if tables and len(tables) > 0:
+                a = tables[0].find("a")
+                if a:
+                    return self.detail_page(a["href"])
 
         return None
 
     def detail_page(self, url):
         html = HttpUtility(url).get()
         soup = BeautifulSoup(html, features)
-
+        # 获取内容
         content = soup.find(id="content")
+        # 获取sub_name
         name = self.get_name(content)
-
+        # 评分
         rating = 0
         if not content.find(class_="rating_num") is None:
             rating = content.find(class_="rating_num").string
-
+        # 评分人数
         rating_sum_tag = content.find(class_="rating_sum").a.span
         rating_sum = 0
         if not rating_sum_tag is None:
             rating_sum = rating_sum_tag.string
 
+        # 海报
         image_url = content.find(id="mainpic").a.img["src"]
+        # 电影信息
         about = self.get_about(content)
-
+        # 电影播放/拍摄 国家
+        area = self.get_area(content)
+        # 简介
         desc = None
         if not content.find(id="link-report") is None and not content.find(id="link-report").span is None:
             desc = content.find(id="link-report").span.string
             if not desc is None:
                 desc = desc.strip()
-
+        # 影评
         comments = self.get_comments(content)
 
         result = {"sub_name": name, "rating": rating, "rating_sum": rating_sum, "image_url": image_url, "about": about,
-                  "content": desc, "comments": comments, "images": None}
+                  "content": desc, "comments": comments, "area": area, "images": None}
         return result
 
     def get_name(self, content):
@@ -103,7 +122,18 @@ class DoubanContentParser:
 
         return comments
 
+    def get_area(self, content):
+        a = content.find(id="info")
+        a = str(a)
+        pattern = re.compile('<span class="pl">制片国家/地区:</span>(.+)<br/>')
+        r = pattern.search(a)
+        are = ""
+        if r:
+            are = r.group(1)
+        # print(r, are, "<<<<<<<<<<<<<<<<<<<<")
+        return are
+
 
 if __name__ == "__main__":
-    r = DoubanContentParser("克里斯汀").start()
+    r = DoubanContentParser("阴阳玦之生死恋").start()
     print(r)
