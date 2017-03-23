@@ -83,6 +83,7 @@ class IndexView(generic.ListView):
             # 获取图片
             try:
                 img = MovieImages.objects.filter(movie=l.id)[0]
+                img.image = img.image.replace(".webp", ".jpg")
                 m["images"] = model_to_dict(img)
             except:
                 print("not found images")
@@ -101,6 +102,7 @@ class DetailView(generic.DetailView):
         m = model_to_dict(model)
         # 获取图片
         img = MovieImages.objects.get(movie=model.id)
+        img.image = img.image.replace(".webp", ".jpg")
         m["images"] = model_to_dict(img)
         m["release_time"] = m["release_time"].strftime("%Y-%m-%d")
 

@@ -38,7 +38,9 @@ class DoubanContentParser:
                 for result in seach_list:
                     content = result.find(class_="content").find(class_="title")
                     name = content.h3.a.string
-                    if content.h3.span.string == "[电影]" and name.find(self.movie_name) >= 0:
+                    # 名字验证
+                    # if content.h3.span.string == "[电影]" and name.find(self.movie_name) >= 0:
+                    if content.h3.span.string == "[电影]":
                         detail_url = content.h3.a["href"]
                         # print(name, detail_url)
                         return self.detail_page(detail_url)

@@ -21,6 +21,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="//cdn.bootcss.com/vue/2.2.4/vue.js"></script>
 </head>
 <body>
+{#<script type="text/javascript" src="{% static 'js/webp/Webp.js' %}"></script>#}
+{#<script type="text/javascript" src="http://www.etherdream.com/WebP/WebP.js"></script>#}
 <div class="header" id="home">
     <nav class="navbar navbar-default ">
         <div class="container">
@@ -71,7 +73,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>
             </div>
             <div class="row ">
-                <div class="col-md-4"><img src="{{ model.images.image }}" alt=""></div>
+                <div class="col-md-4">
+                    <img src="{{ model.images.image }}" >
+{#                    <img src="{% static 'images/test.webp' %}" >#}
+                </div>
                 <div class="col-md-8">
                     <p>{{ model.about|safe }}</p>
                 </div>
@@ -167,13 +172,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!---->
 </footer>
 <!---->
-</body>
+
 <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
 <!-- js -->
 <script src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="http://cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
 <script src="//cdn.bootcss.com/jquery.imagesloaded/4.1.1/imagesloaded.pkgd.min.js"></script>
-
+{#<script type="text/javascript" src="{% static 'js/webp/Webp.js' %}"></script>#}
 <script type="text/javascript" src="{% static 'js/easing.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/layer/layer.js' %}"></script>
 <script type="text/javascript">
@@ -248,4 +253,5 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         $(".layui-layer-content").select();
     }
 </script>
+</body>
 </html>
