@@ -1,10 +1,10 @@
 # coding=utf-8
 import re
 from bs4 import BeautifulSoup
-
-from crawler.db_access import DatabaseAccess
-from crawler.douban_parse import DoubanContentParser
-from crawler.http_utility import HttpUtility
+import time
+from db_access import DatabaseAccess
+from douban_parse import DoubanContentParser
+from http_utility import HttpUtility
 
 # 使用的解析器
 features = "lxml"
@@ -34,6 +34,7 @@ class WebSitParser:
             return
         for l in list:
             self.parse_about(l)
+            time.sleep(1)
         # 递归获取数据
         self.parse_list(page + 1)
         pass
@@ -55,6 +56,11 @@ class WebSitParser:
         # 名字
         name = detail.h2.string
         name = name[name.index("《") + 1:name.index("》")]
+
+        # 验证电影名称是否存在，如存在不继续获取
+        if DatabaseAccess.exist_name(name):
+            return
+
         # 更新时间
         time = detail.find(class_="postmeat").text
         time = time[time.index("：") + 1:time.index("|")]
@@ -158,6 +164,8 @@ class WebSitParser:
         else:
             data_map = dict(d_map, **result)
             pass
-
-        DatabaseAccess.save(data_map)
+        try:
+            DatabaseAccess.save(data_map)
+        except Exception as e:
+            print(e)
         pass

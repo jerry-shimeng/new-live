@@ -1,6 +1,5 @@
 import datetime
-
-from crawler.db import *
+from db import *
 
 
 class DatabaseAccess:
@@ -40,10 +39,14 @@ class DatabaseAccess:
 
         if "area" in data_map.keys():
             model.area = data_map["area"]
+        else:
+            model.area = ""
 
         model.release_time = datetime.datetime.strptime(data_map["time"].strip(), "%Y年%m月%d日").date()
         model.tag = data_map["tag"]
         model.status = 1
+        # model.create_time = time.localtime(time.time())
+
         # model.about = dict["about"]
         model.save()
 
@@ -51,6 +54,7 @@ class DatabaseAccess:
         img.image = data_map["image_url"]
         img.movie = model.get_id()
         img.img_type = 1
+
         img.save()
 
         d_links = data_map["down_links"]

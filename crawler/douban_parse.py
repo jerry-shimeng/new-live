@@ -3,7 +3,7 @@ import traceback
 
 from bs4 import BeautifulSoup
 
-from crawler.http_utility import HttpUtility
+from http_utility import HttpUtility
 
 features = "lxml"
 
