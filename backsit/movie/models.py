@@ -21,6 +21,7 @@ class MovieDetail(models.Model):
     # movie_type = models.
     status = models.SmallIntegerField(default=1)
     create_time = models.TimeField(auto_created=True, default=django.utils.timezone.now)
+    source = models.CharField(max_length=100, null=True)
 
     def get_desc(self):
         return self.content[0:20] + "..."
@@ -61,6 +62,8 @@ class MovieDownloadUrl(models.Model):
 class MovieType(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
+    # 删除字段
+    status = models.SmallIntegerField(default=1)
 
     class Meta:
         db_table = "movie_type"
