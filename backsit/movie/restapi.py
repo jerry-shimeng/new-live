@@ -2,15 +2,16 @@ from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.views import generic
 
-from movie.models import MovieDownloadUrl
+from movie.models import *
 
 
 class MovieDownloadUrlApi(generic.DetailView):
     def get_data(self, id):
-        list = MovieDownloadUrl.objects.filter(movie=id)
+        list = ProductDownloadDetail.objects.filter(product=id)
         r = []
         for l in list:
-            r.append(model_to_dict(l))
+            t = PublicDownloadAddress.objects.get(id=l.address_id)
+            r.append(model_to_dict(t))
         return r
 
     def get(self, request, movie):
