@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'movie',
 ]
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -82,7 +81,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_db1',
+        'NAME': 'test_db2',
         'USER': 'root',
         'PASSWORD': 'root123',
         'HOST': '',
@@ -125,3 +124,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '../movie/static'

@@ -1,66 +1,136 @@
 import datetime
-from db import *
+from db_model import *
+
+movie_key = "movie"
+
+base_source = "lbl"
 
 
 class DatabaseAccess:
     @classmethod
     def exist_name(cls, name):
         try:
-            m = MovieDetail.get(MovieDetail.name == name)
+            m = cls.get_product_by_name(name)
             return not m is None
         except:
             return False
 
     @classmethod
-    def save(cls, data_map):
+    def get_product_by_name(cls, name):
+        try:
+            return ProductMovieDetail.get(ProductMovieDetail.product_name == name)
+        except:
+            return None
+
+    @classmethod
+    def get_product_detail(cls, detail_id, product_type):
+        if product_type == cls.get_product_type(movie_key):
+            return ProductMovieDetail.get(ProductMovieDetail.id == detail_id)
+        else:
+            return None
+
+    @classmethod
+    def get_product_type(cls, key=movie_key):
+        try:
+            return ProductType.get(ProductType.key == key)
+        except Exception as e:
+            print("not found ProductType = ", key)
+            raise e
+
+    @classmethod
+    def get_data_source(cls, source=base_source):
+        try:
+            return PublicDataSource.get(PublicDataSource.key == source)
+        except Exception as e:
+            print("not found PublicDataSource = ", source)
+            raise e
+
+    @classmethod
+    def save_as_lbl(cls, data_map):
         if cls.exist_name(data_map["name"]):
             return
+        product = ProductInfo()
+        product_movie = ProductMovieDetail()
 
-        # self.save(name=name, time=time, tag=status, image=img, content=content, about=about, down_links=down_links)
-        model = MovieDetail()
-        model.about = data_map["about"]
-        model.content = data_map["content"]
-        model.name = data_map["name"]
-        if "sub_name" in data_map.keys():
-            model.sub_name = data_map["sub_name"]
-        else:
-            model.sub_name = None
-        if "rating" in data_map.keys():
-            model.rating = data_map["rating"]
-            if model.rating is None:
-                model.rating = 0
-        else:
-            model.rating = 0
+        # 产品
+        product.product_name = data_map["name"]
+        product.product_type = cls.get_product_type().id
+        product.source = cls.get_data_source().id
+        product.status = 0
+        product.order_index = cls.get_last_order_index() + 1
+        # 电影详情
+        product_movie.about = data_map["about"]
+        product_movie.area = ""
+        product_movie.product_name = data_map["name"]
+        product_movie.product_alias = data_map["name"]
+        product_movie.release_time = datetime.datetime.strptime(data_map["time"].strip(), "%Y年%m月%d日").date()
+        product_movie.rating = 0
+        product_movie.rating_sum = 0
+        product_movie.status = 1
 
-        if "rating_sum" in data_map.keys():
-            model.rating_sum = data_map["rating_sum"]
-        else:
-            model.rating_sum = 0
+        product_movie.save()
 
-        if "area" in data_map.keys():
-            model.area = data_map["area"]
-        else:
-            model.area = ""
+        # 设置id
+        product.detail = product_movie.get_id()
 
-        model.release_time = datetime.datetime.strptime(data_map["time"].strip(), "%Y年%m月%d日").date()
-        model.tag = data_map["tag"]
-        model.status = 1
-        # model.create_time = time.localtime(time.time())
+        product.save()
 
-        # model.about = dict["about"]
-        model.save()
-
-        img = MovieImages()
-        img.image = data_map["image_url"]
-        img.movie = model.get_id()
-        img.img_type = 1
-
-        img.save()
-
+        # 保存下载地址
         d_links = data_map["down_links"]
         if not d_links is None:
             for link in d_links:
-                durl = MovieDownloadUrl()
-                durl.download_url = link
-                durl.movie = model.get_id()
-                durl.save()
+                d = PublicDownloadAddress()
+                d.download_url = link
+                d.status = 1
+                d.download_type = 1
+                d.save()
+                detail = ProductDownloadDetail()
+                detail.address = d.get_id()
+                detail.product = product.get_id()
+                detail.save()
+
+    @classmethod
+    def get_last_order_index(cls):
+        try:
+            return ProductInfo.select(ProductInfo.order_index).order_by(ProductInfo.order_index.desc())[0].order_index
+        except:
+            return 0
+
+    @classmethod
+    def get_product_by_source(cls, source):
+        source_id = cls.get_data_source(source).id
+
+        list = ProductInfo.filter(ProductInfo.source != source_id).order_by(ProductInfo.id.desc())[0:10]
+        return list
+
+    @classmethod
+    def save_as_douban(cls, product, result, source):
+        detail = cls.get_product_detail(product.detail, product.product_type)
+        detail.product_alias = result["sub_name"]
+        detail.about = result["about"]
+        detail.area = result["area"]
+        detail.content = result["content"]
+        detail.rating = result["rating"]
+        detail.rating_sum = result["rating_sum"]
+        detail.status = 1
+        detail.save()
+
+        img = PublicImages()
+        img.image = result["image_url"]
+        img.img_type = 1
+        img.status = 1
+        img.save()
+
+        # 关系
+        pro_img = ProductImagesDetail()
+        pro_img.image = img.get_id()
+        pro_img.product = product.id
+        pro_img.save()
+
+        product.source = cls.get_data_source(source).id
+        product.status = 1
+        product.save()
+
+        print(product.product_name, "form source", source)
+        # comments 评论信息保存
+        # result["comments"]

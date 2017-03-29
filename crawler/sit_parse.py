@@ -20,8 +20,10 @@ class WebSitParser:
     # 获取电影列表
     def parse_list(self, page=1):
         url = self.url
-        if page != 0:
+        if page > 0:
             url = self.url + "page/%d/" % page
+        else:
+            return
         print(url, end="\n")
 
         h = HttpUtility(url)
@@ -36,7 +38,7 @@ class WebSitParser:
             self.parse_about(l)
             time.sleep(1)
         # 递归获取数据
-        self.parse_list(page + 1)
+        self.parse_list(page - 1)
         pass
 
     # 获取电影简介
@@ -67,24 +69,24 @@ class WebSitParser:
         # 状态
         status = detail.find(class_="postmeat").span.text
         # 图片
-        imgs = detail.find_all("img")
-        img = ""
-        if len(imgs) > 0:
-            # print(imgs[0])
-            img = imgs[0]["src"]
+        # imgs = detail.find_all("img")
+        # img = ""
+        # if len(imgs) > 0:
+        #     # print(imgs[0])
+        #     img = imgs[0]["src"]
 
         div = detail.find("div", class_="entry")
         # 下载地址
         down_links = self.get_download_url(div)
 
         # 豆瓣上获取详情
-        result = DoubanContentParser(name).start()
+        # result = DoubanContentParser(name).start()
 
         #  获取内容
         content, about = self.get_content(div)
-        print(name, time, status, img, content, about, down_links, result, end="\n \n \n")
+        print(name, time, status, content, about, down_links, end="\n \n \n")
 
-        self.save(result, name=name, time=time, tag=status, image_url=img, content=content, about=about,
+        self.save(name=name, time=time, tag=status, content=content, about=about,
                   down_links=down_links)
         pass
 
@@ -156,16 +158,6 @@ class WebSitParser:
             "&tr=http://www.youjiady.com", "")
         return url
 
-    def save(self, result, **d_map):
+    def save(self, **d_map):
 
-        data_map = {}
-        if result is None:
-            data_map = d_map
-        else:
-            data_map = dict(d_map, **result)
-            pass
-        try:
-            DatabaseAccess.save(data_map)
-        except Exception as e:
-            print(e)
-        pass
+        DatabaseAccess.save_as_lbl(d_map)
