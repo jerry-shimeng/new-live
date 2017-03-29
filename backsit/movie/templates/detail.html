@@ -24,7 +24,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 {#<script type="text/javascript" src="{% static 'js/webp/Webp.js' %}"></script>#}
 {#<script type="text/javascript" src="http://www.etherdream.com/WebP/WebP.js"></script>#}
 <div class="header" id="home">
-     {% include 'head.html' %}
+    {% include 'head.html' %}
 </div>
 <div class="container" style="margin-top: 20px;margin-bottom: 50px;">
     <div class="row">
@@ -39,8 +39,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
             <div class="row ">
                 <div class="col-md-4">
-                    <img src="{{ model.images.image }}" >
-{#                    <img src="{% static 'images/test.webp' %}" >#}
+                    <img src="{{ model.images.image }}">
+                    {#                    <img src="{% static 'images/test.webp' %}" >#}
                 </div>
                 <div class="col-md-8">
                     <p>{{ model.about|safe }}</p>
@@ -88,7 +88,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 </div>
 
- {% include 'footer.html' %}
+{% include 'footer.html' %}
 <!---->
 
 <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
@@ -110,21 +110,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <script>
 
-    var download = {{ model.download|safe }};
-
+    var download = [];
+    var productId = {{ model.id }};
     {#    var download = JSON.parse(download_data);#}
 
     $(function () {
-        var urls = initDownloadUrl();
-
-        new Vue({
-            el: "#download",
-            data: {
-                downloads: urls
-            },
+        getDownloadData(function () {
+            var urls = initDownloadUrl();
+            new Vue({
+                el: "#download",
+                data: {
+                    downloads: urls
+                },
+            });
         });
     });
 
+
+    var getDownloadData = function (call) {
+        var url = "/api/down/" + productId;
+        $.get(url, {}, function (d) {
+            download = JSON.parse(d);
+            call();
+        });
+    };
 
     var initDownloadUrl = function () {
 
@@ -133,6 +142,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         for (var i = 0; i < download.length; i++) {
             var a = download[i].download_url;
             if (a.indexOf("pan.baidu.com") > 0) {
+                var num = a.indexOf("href");
+                a = a.substr(0,num)+" target='_blank' " + a.substring(num,a.length);
                 list.push(a);
             } else if (a.indexOf("ed2k:") >= 0) {
                 var s = "<a href='" + a + "'>迅雷下载</a>(如不能唤起迅雷，请点此<a href='#' onclick='copy_url()'>复制下载地址</a>，粘贴到迅雷中下载)";
@@ -146,7 +157,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             }
 
         }
-
+        console.log(JSON.stringify(list));
         return list;
     };
 

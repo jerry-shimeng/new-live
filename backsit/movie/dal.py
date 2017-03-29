@@ -11,10 +11,10 @@ class DataBaseAccess:
     def get_product_list(cls, page=1):
 
         product_type_id = cls.get_movie_product_type().id
-
-        products = ProductInfo.objects.filter(product_type=product_type_id, status=1).order_by("-update_time")[
+        print(product_type_id)
+        products = ProductInfo.objects.filter(product_type=product_type_id, status=1).order_by("-order_index")[
                    (page - 1) * page_size:page_size * page]
-
+        # print(products)
         return cls.get_movie_list(products)
 
     @classmethod
@@ -35,15 +35,6 @@ class DataBaseAccess:
             if product.detail == 0:
                 continue
             model = cls.get_product_detail(product.id)
-            # query = ProductMovieDetail.objects.get(id=product.detail)
-            # if query is None:
-            #     continue
-            # # 获取图片
-            # query = model_to_dict(query)
-            # product = model_to_dict(product)
-            # model = dict(query, **product)
-            # model["release_time"] = model["release_time"].strftime("%Y-%m-%d")
-            # model["images"] = cls.get_product_images(model["id"])
             list.append(model)
         return list
 
@@ -51,6 +42,7 @@ class DataBaseAccess:
     def get_product_images(cls, id):
         list = []
         imgs = ProductImagesDetail.objects.filter(product=id)
+        # print(imgs)
         for img in imgs:
             img.image.image = img.image.image.replace(".webp", ".jpg")
             list.append(model_to_dict(img.image))
@@ -65,7 +57,7 @@ class DataBaseAccess:
         model = dict(query, **product)
         if not model["release_time"] is None:
             model["release_time"] = model["release_time"].strftime("%Y-%m-%d")
-        model["images"] = cls.get_product_images(model["id"])
+        model["images"] = cls.get_product_images(model["id"])[0]
         return model
 
     @classmethod

@@ -89,20 +89,5 @@ class DetailView(generic.DetailView):
     context_object_name = "model"
 
     def get_detail(self, request, pk):
-        # model = ProductMovieDetail.objects.get(pk=pk)
-        # m = model_to_dict(model)
-        # # 获取图片
-        # img = PublicImages.objects.get(movie=model.id)
-        # img.image = img.image.replace(".webp", ".jpg")
-        # m["images"] = model_to_dict(img)
-        # m["release_time"] = m["release_time"].strftime("%Y-%m-%d")
-        #
-        # durls = PublicDownloadAddress.objects.filter(movie=model.id)
-        # durl = []
-        # for d in durls:
-        #     durl.append(model_to_dict(d))
-        #
-        # m["download"] = json.dumps(durl)
-        # print(m["download"])
         m = DataBaseAccess.get_product_detail(pk)
         return render(request, self.template_name, {"model": m})

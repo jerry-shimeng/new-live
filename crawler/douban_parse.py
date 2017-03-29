@@ -1,16 +1,39 @@
 import re
 import traceback
 
+import time
+
+import bs4
 from bs4 import BeautifulSoup
 
+from db_access import DatabaseAccess
 from http_utility import HttpUtility
 
 features = "lxml"
+
+douban_sorce = "douban"
 
 
 class DoubanContentParser:
     search_url = "https://www.douban.com/search?q=%s"
     sub_search_url = "https://movie.douban.com/subject_search?search_text=%s"
+
+    @classmethod
+    def run(cls):
+        # 获取数据源非豆瓣的list（size=10）
+        list = DatabaseAccess.get_product_by_source(douban_sorce)
+        # print(list)
+        while list is not None and len(list) > 0:
+            for l in list:
+                result = cls(l.product_name).start()
+                if result is None:
+                    continue
+                try:
+                    DatabaseAccess.save_as_douban(l, result, douban_sorce)
+                except Exception as e:
+                    print(e)
+            time.sleep(10)
+            cls.run()
 
     def __init__(self, name):
         self.movie_name = name
@@ -24,7 +47,7 @@ class DoubanContentParser:
             traceback.print_exc()
             return None
 
-    def search_result(self, ):
+    def search_result(self):
         html = HttpUtility(self.search_url).get()
         # print(content)
         soup = BeautifulSoup(html, features)
@@ -80,14 +103,21 @@ class DoubanContentParser:
         # 简介
         desc = None
         if not content.find(id="link-report") is None and not content.find(id="link-report").span is None:
-            desc = content.find(id="link-report").span.string
-            if not desc is None:
-                desc = desc.strip()
+            desc = content.find(id="link-report").find(class_="all")
+            con = ""
+            if desc is None:
+                con = content.find(id="link-report").span.string
+            else:
+                for tag in desc.contents:
+                    if type(tag) is bs4.element.NavigableString:
+                        con = con + tag.string
+            if not con is None:
+                con = con.strip()
         # 影评
         comments = self.get_comments(content)
 
         result = {"sub_name": name, "rating": rating, "rating_sum": rating_sum, "image_url": image_url, "about": about,
-                  "content": desc, "comments": comments, "area": area, "images": None}
+                  "content": con, "comments": comments, "area": area, "images": None}
         return result
 
     def get_name(self, content):
@@ -137,5 +167,5 @@ class DoubanContentParser:
 
 
 if __name__ == "__main__":
-    r = DoubanContentParser("阴阳玦之生死恋").start()
+    r = DoubanContentParser("下流祖父").start()
     print(r)

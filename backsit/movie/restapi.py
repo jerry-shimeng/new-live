@@ -1,3 +1,5 @@
+import json
+
 from django.forms import model_to_dict
 from django.http import HttpResponse
 from django.views import generic
@@ -10,10 +12,12 @@ class MovieDownloadUrlApi(generic.DetailView):
         list = ProductDownloadDetail.objects.filter(product=id)
         r = []
         for l in list:
-            t = PublicDownloadAddress.objects.get(id=l.address_id)
-            r.append(model_to_dict(t))
+            t = PublicDownloadAddress.objects.values("download_url").get(id=l.address_id)
+
+            r.append(t)
         return r
 
     def get(self, request, movie):
         list = self.get_data(movie)
-        return HttpResponse(list)
+        # print(list)
+        return HttpResponse(json.dumps(list))

@@ -13,6 +13,7 @@ class SensitiveWords(models.Model):
     class Meta:
         db_table = "sensitive_words"
 
+
 class ProductType(models.Model):
     id = models.AutoField(primary_key=True)
     parent_id = models.IntegerField(default=0)
@@ -29,6 +30,7 @@ class ProductType(models.Model):
 class PublicDataSource(models.Model):
     id = models.AutoField(primary_key=True)
     source_name = models.CharField(max_length=100)
+    key = models.CharField(max_length=50)
     source_type = models.SmallIntegerField()
     status = models.SmallIntegerField()
     create_time = models.DateTimeField()
@@ -36,7 +38,7 @@ class PublicDataSource(models.Model):
     class Meta:
         db_table = "public_data_source"
 
-    # 公共图片库
+        # 公共图片库
 
 
 class PublicImages(models.Model):
@@ -61,16 +63,18 @@ class PublicDownloadAddress(models.Model):
     class Meta:
         db_table = "public_download_address"
 
+
 # product_type & detail 获取实际数据类型
 class ProductInfo(models.Model):
     id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=50)
     product_type = models.ForeignKey(ProductType)
-    source = models.OneToOneField(PublicDataSource)
+    source = models.ForeignKey(PublicDataSource)
     detail = models.IntegerField()
     status = models.SmallIntegerField()
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
+    order_index = models.IntegerField(null=True)
 
     class Meta:
         db_table = "product_info"
@@ -102,39 +106,26 @@ class ProductMovieDetail(models.Model):
 class ProductSubTypeDetail(models.Model):
     id = models.AutoField(primary_key=True)
     product = models.ForeignKey(ProductInfo)
-    sub_type = models.OneToOneField(ProductType)
+    sub_type = models.ForeignKey(ProductType)
 
     class Meta:
         db_table = "product_sub_type_detail"
 
 
-
-
-
 # 产品图片详情表
 class ProductImagesDetail(models.Model):
     id = models.AutoField(primary_key=True)
-    product = models.OneToOneField(ProductInfo)
-    image = models.OneToOneField(PublicImages)
+    product = models.ForeignKey(ProductInfo)
+    image = models.ForeignKey(PublicImages)
 
     class Meta:
         db_table = "product_images_detail"
 
 
-
 class ProductDownloadDetail(models.Model):
     id = models.AutoField(primary_key=True)
-    product = models.OneToOneField(ProductInfo)
-    address = models.OneToOneField(PublicDownloadAddress)
+    product = models.ForeignKey(ProductInfo)
+    address = models.ForeignKey(PublicDownloadAddress)
 
     class Meta:
         db_table = "product_download_detail"
-
-
-
-
-
-
-
-
-

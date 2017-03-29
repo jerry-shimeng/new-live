@@ -1,6 +1,6 @@
 from peewee import *
 
-database = MySQLDatabase('test_db1', **{'host': 'localhost', 'port': 3306, 'user': 'root', 'password': 'root123'})
+database = MySQLDatabase('test_db2', **{'host': 'localhost', 'port': 3306, 'user': 'root', 'password': 'root123'})
 
 class UnknownField(object):
     def __init__(self, *_, **__): pass
@@ -109,53 +109,96 @@ class DjangoSession(BaseModel):
     class Meta:
         db_table = 'django_session'
 
-class MovieDetail(BaseModel):
-    about = TextField(null=True)
-    content = TextField(null=True)
+class PublicDownloadAddress(BaseModel):
     create_time = DateTimeField()
+    download_type = IntegerField()
+    download_url = CharField()
+    status = IntegerField()
+
+    class Meta:
+        db_table = 'public_download_address'
+
+class ProductType(BaseModel):
+    create_time = DateTimeField()
+    describe = CharField(null=True)
+    key = CharField()
     name = CharField()
+    parent = IntegerField(db_column='parent_id')
+    status = IntegerField()
+
+    class Meta:
+        db_table = 'product_type'
+
+class PublicDataSource(BaseModel):
+    create_time = DateTimeField()
+    key = CharField()
+    source_name = CharField()
+    source_type = IntegerField()
+    status = IntegerField()
+
+    class Meta:
+        db_table = 'public_data_source'
+
+class ProductInfo(BaseModel):
+    create_time = DateTimeField()
+    detail = IntegerField()
+    order_index = IntegerField(null=True)
+    product_name = CharField()
+    product_type = ForeignKeyField(db_column='product_type_id', rel_model=ProductType, to_field='id')
+    source = ForeignKeyField(db_column='source_id', rel_model=PublicDataSource, to_field='id')
+    status = IntegerField()
+    update_time = DateTimeField()
+
+    class Meta:
+        db_table = 'product_info'
+
+class ProductDownloadDetail(BaseModel):
+    address = ForeignKeyField(db_column='address_id', rel_model=PublicDownloadAddress, to_field='id')
+    product = ForeignKeyField(db_column='product_id', rel_model=ProductInfo, to_field='id')
+
+    class Meta:
+        db_table = 'product_download_detail'
+
+class PublicImages(BaseModel):
+    create_time = DateTimeField()
+    image = CharField()
+    img_type = IntegerField()
+    status = IntegerField()
+
+    class Meta:
+        db_table = 'public_images'
+
+class ProductImagesDetail(BaseModel):
+    image = ForeignKeyField(db_column='image_id', rel_model=PublicImages, to_field='id')
+    product = ForeignKeyField(db_column='product_id', rel_model=ProductInfo, to_field='id')
+
+    class Meta:
+        db_table = 'product_images_detail'
+
+class ProductMovieDetail(BaseModel):
+    about = TextField(null=True)
+    area = CharField(null=True)
+    content = TextField(null=True)
+    product_alias = CharField()
+    product_name = CharField()
     rating = FloatField()
     rating_sum = IntegerField()
     release_time = DateField(null=True)
     status = IntegerField()
-    sub_name = CharField(null=True)
-    tag = CharField(null=True)
-    area = CharField(null=True)
 
     class Meta:
-        db_table = 'movie_detail'
+        db_table = 'product_movie_detail'
 
-class MovieDownloadUrl(BaseModel):
-    download_url = CharField()
-    movie = ForeignKeyField(db_column='movie_id', null=True, rel_model=MovieDetail, to_field='id')
-
-    class Meta:
-        db_table = 'movie_download_url'
-
-class MovieImages(BaseModel):
-    image = CharField()
-    img_type = IntegerField(null=True)
-    movie = ForeignKeyField(db_column='movie_id', null=True, rel_model=MovieDetail, to_field='id')
+class ProductSubTypeDetail(BaseModel):
+    product = ForeignKeyField(db_column='product_id', rel_model=ProductInfo, to_field='id')
+    sub_type = ForeignKeyField(db_column='sub_type_id', rel_model=ProductType, to_field='id')
 
     class Meta:
-        db_table = 'movie_images'
-
-class MovieType(BaseModel):
-    name = CharField()
-
-    class Meta:
-        db_table = 'movie_type'
-
-class MovieTypeDetail(BaseModel):
-    movie = ForeignKeyField(db_column='movie_id', rel_model=MovieDetail, to_field='id')
-    movie_type = ForeignKeyField(db_column='movie_type_id', rel_model=MovieType, to_field='id')
-
-    class Meta:
-        db_table = 'movie_type_detail'
+        db_table = 'product_sub_type_detail'
 
 class SensitiveWords(BaseModel):
-    tag = IntegerField()
     word = CharField()
+    word_type = IntegerField()
 
     class Meta:
         db_table = 'sensitive_words'
