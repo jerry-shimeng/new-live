@@ -110,7 +110,8 @@ p, a, span, i {
     margin-top: 20px;
     margin-bottom: 50px;
 }
-.list-search{
+
+.list-search {
     margin: 10px;
 }
 
@@ -119,7 +120,7 @@ p, a, span, i {
     margin-right: 25px;
 }
 
-.list ul li{
+.list ul li {
     border: none;
     border-top: 1px dashed #71c6c1;
 
@@ -135,6 +136,43 @@ p, a, span, i {
 .download p {
     padding-left: 0 !important;
     margin-left: 0;
+}
+
+.comment {
+    overflow: hidden;
+    color: #494949;
+    word-wrap: break-word;
+    margin: 1.5em 0 1em 0;
+    /*height: 1.7em;*/
+    line-height: 1.7em;
+    padding-left: 4px;
+    display: block;
+    font-size: 1.17em;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+.comment h3 {
+    background: none;
+    font-size: 12px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    color: #494949;
+    margin-bottom: 5px;
+}
+
+.comment p {
+    font-size: 12px;
+    padding: 5px;
+}
+
+.comment-info {
+    color: #3382D3;
 }
 
 /*.container p{

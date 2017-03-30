@@ -5,6 +5,7 @@ import time
 from db_access import DatabaseAccess
 from douban_parse import DoubanContentParser
 from http_utility import HttpUtility
+from logger_proxy import logger
 
 # 使用的解析器
 features = "lxml"
@@ -24,7 +25,7 @@ class WebSitParser:
             url = self.url + "page/%d/" % page
         else:
             return
-        print(url, end="\n")
+        logger.info(url)
 
         h = HttpUtility(url)
         html = h.get()
@@ -68,12 +69,6 @@ class WebSitParser:
         time = time[time.index("：") + 1:time.index("|")]
         # 状态
         status = detail.find(class_="postmeat").span.text
-        # 图片
-        # imgs = detail.find_all("img")
-        # img = ""
-        # if len(imgs) > 0:
-        #     # print(imgs[0])
-        #     img = imgs[0]["src"]
 
         div = detail.find("div", class_="entry")
         # 下载地址
@@ -84,7 +79,7 @@ class WebSitParser:
 
         #  获取内容
         content, about = self.get_content(div)
-        print(name, time, status, content, about, down_links, end="\n \n \n")
+        logger.info(name + time)
 
         self.save(name=name, time=time, tag=status, content=content, about=about,
                   down_links=down_links)
@@ -109,7 +104,7 @@ class WebSitParser:
                     continue
 
                 href = self.process_download_url(a["href"])
-                # print(href)
+
                 if len(href.strip()) < 10:
                     continue
                 if href.find("pan.baidu.com") > 0:

@@ -67,7 +67,7 @@ class PublicDownloadAddress(models.Model):
 # product_type & detail 获取实际数据类型
 class ProductInfo(models.Model):
     id = models.AutoField(primary_key=True)
-    product_name = models.CharField(max_length=50)
+    product_name = models.CharField(max_length=200)
     product_type = models.ForeignKey(ProductType)
     source = models.ForeignKey(PublicDataSource)
     detail = models.IntegerField()
@@ -82,8 +82,8 @@ class ProductInfo(models.Model):
 
 class ProductMovieDetail(models.Model):
     id = models.AutoField(primary_key=True)
-    product_name = models.CharField(max_length=50)
-    product_alias = models.CharField(max_length=50)
+    product_name = models.CharField(max_length=200)
+    product_alias = models.CharField(max_length=200)
     rating = models.FloatField(default=0)
     rating_sum = models.IntegerField(default=0)
     release_time = models.DateField(null=True, blank=True, default=datetime.date.today())
@@ -129,3 +129,22 @@ class ProductDownloadDetail(models.Model):
 
     class Meta:
         db_table = "product_download_detail"
+
+
+class ProductCommentInfo(models.Model):
+    id = models.AutoField(primary_key=True)
+    content = models.TextField()
+    user_name = models.CharField(max_length=50)
+    comment_time = models.DateField()
+
+    class Meta:
+        db_table = "product_comment_info"
+
+
+class ProductCommentDetail(models.Model):
+    id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(ProductInfo)
+    comment_info = models.ForeignKey(ProductCommentInfo)
+
+    class Meta:
+        db_table = "product_comment_detail"

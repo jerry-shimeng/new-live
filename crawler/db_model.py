@@ -1,19 +1,24 @@
 from peewee import *
+import config
 
-database = MySQLDatabase('test_db2', **{'host': 'localhost', 'port': 3306, 'user': 'root', 'password': 'root123'})
+database = MySQLDatabase('test_db2', **config.database)
+
 
 class UnknownField(object):
     def __init__(self, *_, **__): pass
 
+
 class BaseModel(Model):
     class Meta:
         database = database
+
 
 class AuthGroup(BaseModel):
     name = CharField(unique=True)
 
     class Meta:
         db_table = 'auth_group'
+
 
 class DjangoContentType(BaseModel):
     app_label = CharField()
@@ -24,6 +29,7 @@ class DjangoContentType(BaseModel):
         indexes = (
             (('app_label', 'model'), True),
         )
+
 
 class AuthPermission(BaseModel):
     codename = CharField()
@@ -36,6 +42,7 @@ class AuthPermission(BaseModel):
             (('content_type', 'codename'), True),
         )
 
+
 class AuthGroupPermissions(BaseModel):
     group = ForeignKeyField(db_column='group_id', rel_model=AuthGroup, to_field='id')
     permission = ForeignKeyField(db_column='permission_id', rel_model=AuthPermission, to_field='id')
@@ -45,6 +52,7 @@ class AuthGroupPermissions(BaseModel):
         indexes = (
             (('group', 'permission'), True),
         )
+
 
 class AuthUser(BaseModel):
     date_joined = DateTimeField()
@@ -61,6 +69,7 @@ class AuthUser(BaseModel):
     class Meta:
         db_table = 'auth_user'
 
+
 class AuthUserGroups(BaseModel):
     group = ForeignKeyField(db_column='group_id', rel_model=AuthGroup, to_field='id')
     user = ForeignKeyField(db_column='user_id', rel_model=AuthUser, to_field='id')
@@ -71,6 +80,7 @@ class AuthUserGroups(BaseModel):
             (('user', 'group'), True),
         )
 
+
 class AuthUserUserPermissions(BaseModel):
     permission = ForeignKeyField(db_column='permission_id', rel_model=AuthPermission, to_field='id')
     user = ForeignKeyField(db_column='user_id', rel_model=AuthUser, to_field='id')
@@ -80,6 +90,7 @@ class AuthUserUserPermissions(BaseModel):
         indexes = (
             (('user', 'permission'), True),
         )
+
 
 class DjangoAdminLog(BaseModel):
     action_flag = IntegerField()
@@ -93,6 +104,7 @@ class DjangoAdminLog(BaseModel):
     class Meta:
         db_table = 'django_admin_log'
 
+
 class DjangoMigrations(BaseModel):
     app = CharField()
     applied = DateTimeField()
@@ -100,6 +112,7 @@ class DjangoMigrations(BaseModel):
 
     class Meta:
         db_table = 'django_migrations'
+
 
 class DjangoSession(BaseModel):
     expire_date = DateTimeField(index=True)
@@ -109,6 +122,24 @@ class DjangoSession(BaseModel):
     class Meta:
         db_table = 'django_session'
 
+
+class ProductCommentDetail(BaseModel):
+    comment_info = IntegerField(db_column='comment_info_id', index=True)
+    product = IntegerField(db_column='product_id', index=True)
+
+    class Meta:
+        db_table = 'product_comment_detail'
+
+
+class ProductCommentInfo(BaseModel):
+    comment_time = DateTimeField()
+    content = TextField()
+    user_name = CharField()
+
+    class Meta:
+        db_table = 'product_comment_info'
+
+
 class PublicDownloadAddress(BaseModel):
     create_time = DateTimeField()
     download_type = IntegerField()
@@ -117,6 +148,7 @@ class PublicDownloadAddress(BaseModel):
 
     class Meta:
         db_table = 'public_download_address'
+
 
 class ProductType(BaseModel):
     create_time = DateTimeField()
@@ -129,6 +161,7 @@ class ProductType(BaseModel):
     class Meta:
         db_table = 'product_type'
 
+
 class PublicDataSource(BaseModel):
     create_time = DateTimeField()
     key = CharField()
@@ -138,6 +171,7 @@ class PublicDataSource(BaseModel):
 
     class Meta:
         db_table = 'public_data_source'
+
 
 class ProductInfo(BaseModel):
     create_time = DateTimeField()
@@ -152,12 +186,14 @@ class ProductInfo(BaseModel):
     class Meta:
         db_table = 'product_info'
 
+
 class ProductDownloadDetail(BaseModel):
     address = ForeignKeyField(db_column='address_id', rel_model=PublicDownloadAddress, to_field='id')
     product = ForeignKeyField(db_column='product_id', rel_model=ProductInfo, to_field='id')
 
     class Meta:
         db_table = 'product_download_detail'
+
 
 class PublicImages(BaseModel):
     create_time = DateTimeField()
@@ -168,12 +204,14 @@ class PublicImages(BaseModel):
     class Meta:
         db_table = 'public_images'
 
+
 class ProductImagesDetail(BaseModel):
     image = ForeignKeyField(db_column='image_id', rel_model=PublicImages, to_field='id')
     product = ForeignKeyField(db_column='product_id', rel_model=ProductInfo, to_field='id')
 
     class Meta:
         db_table = 'product_images_detail'
+
 
 class ProductMovieDetail(BaseModel):
     about = TextField(null=True)
@@ -189,6 +227,7 @@ class ProductMovieDetail(BaseModel):
     class Meta:
         db_table = 'product_movie_detail'
 
+
 class ProductSubTypeDetail(BaseModel):
     product = ForeignKeyField(db_column='product_id', rel_model=ProductInfo, to_field='id')
     sub_type = ForeignKeyField(db_column='sub_type_id', rel_model=ProductType, to_field='id')
@@ -196,10 +235,10 @@ class ProductSubTypeDetail(BaseModel):
     class Meta:
         db_table = 'product_sub_type_detail'
 
+
 class SensitiveWords(BaseModel):
     word = CharField()
     word_type = IntegerField()
 
     class Meta:
         db_table = 'sensitive_words'
-

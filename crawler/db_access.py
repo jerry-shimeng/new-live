@@ -131,6 +131,28 @@ class DatabaseAccess:
         product.status = 1
         product.save()
 
+        cls.save_comment_info(product.id, result["comments"])
+
         print(product.product_name, "form source", source)
         # comments 评论信息保存
         # result["comments"]
+
+    @classmethod
+    def save_comment_info(cls, product_id, comments):
+
+        if comments is None or len(comments) == 0:
+            return
+
+        for comment in comments:
+            product_comment = ProductCommentInfo()
+            product_comment.content = comment["content"]
+            product_comment.user_name = comment["user_name"]
+            product_comment.comment_time = datetime.datetime.strptime(comment["comment_time"].strip(),
+                                                                      "%Y-%m-%d %H:%M:%S").date()
+
+            product_comment.save()
+
+            product_comment_detail = ProductCommentDetail()
+            product_comment_detail.product = product_id
+            product_comment_detail.comment_info = product_comment.get_id()
+            product_comment_detail.save()

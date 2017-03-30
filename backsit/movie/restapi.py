@@ -7,7 +7,7 @@ from django.views import generic
 from movie.models import *
 
 
-class MovieDownloadUrlApi(generic.DetailView):
+class ProductDownloadUrlApi(generic.DetailView):
     def get_data(self, id):
         list = ProductDownloadDetail.objects.filter(product=id)
         r = []
@@ -17,7 +17,33 @@ class MovieDownloadUrlApi(generic.DetailView):
             r.append(t)
         return r
 
-    def get(self, request, movie):
-        list = self.get_data(movie)
-        # print(list)
+    def get(self, request, id):
+        list = []
+        try:
+            list = self.get_data(id)
+        except:
+            pass
         return HttpResponse(json.dumps(list))
+
+
+class ProductCommentApi(generic.ListView):
+    def query_set(self, id):
+        details = ProductCommentDetail.objects.filter(product=id)
+        r = []
+        for detail in details:
+            t = detail.comment_info
+            if t is None:
+                continue
+            t = model_to_dict(t)
+            t["comment_time"] = t["comment_time"].strftime('%Y-%m-%d')
+
+            r.append(t)
+        return r
+
+    def get(self, request, id):
+        list = []
+        try:
+            list = self.query_set(id)
+        except:
+            pass
+        return HttpResponse(json.dumps(list, ensure_ascii=False))
