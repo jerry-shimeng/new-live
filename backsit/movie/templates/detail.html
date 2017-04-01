@@ -13,10 +13,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     function hideURLbar() {
         window.scrollTo(0, 1);
     } </script>
-    <!--flexslider-css-->
-    <!--bootstrap-->
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <!--coustom css-->
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
     <script src="//cdn.bootcss.com/vue/2.2.4/vue.js"></script>
     <style>
@@ -33,43 +30,70 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </div>
 <div id="body" class="container" style="margin-top: 20px;margin-bottom: 50px;">
     <div class="row">
-        <div class="col-md-9 content">
+        <div class="col-md-9 ">
+            <div class="content">
+                <div class="row">
+                    <div class="page-header">
+                        <h1>
+                            {{ model.product_name }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="col-md-4">
+                        <img src="{{ model.images.image }}">
+                        {#                    <img src="{% static 'images/test.webp' %}" >#}
+                    </div>
+                    <div class="col-md-8">
+                        <p>{{ model.about|safe }}</p>
+                    </div>
+                </div>
 
-            <div class="row">
-                <div class="page-header">
-                    <h1>
-                        {{ model.product_name }}
-                    </h1>
-                </div>
-            </div>
-            <div class="row ">
-                <div class="col-md-4">
-                    <img src="{{ model.images.image }}">
-                    {#                    <img src="{% static 'images/test.webp' %}" >#}
-                </div>
-                <div class="col-md-8">
-                    <p>{{ model.about|safe }}</p>
-                </div>
-            </div>
+                {% if model.content %}
+                    <div class="row content-block">
+                        <h2>{{ model.product_name }}的剧情简介</h2>
+                        <p>
+                            {{ model.content }}
+                        </p>
+                    </div>
+                {% endif %}
 
-            {% if model.content %}
                 <div class="row content-block">
-                    <h2>{{ model.product_name }}的剧情简介</h2>
-                    <p>
-                        {{ model.content }}
-                    </p>
+                    <h2>{{ model.product_name }}的下载链接</h2>
+                    <div class="download" v-cloak>
+                        <ul id="download">
+                            <li v-for="item in downloads" v-html="item">
+                                {% templatetag openvariable %} item {% templatetag closevariable %}
+                            </li>
+                        </ul>
+                        {#                        {% templatetag openvariable %} 内容内容 {% templatetag closevariable %}#}
+                    </div>
                 </div>
-            {% endif %}
+            </div>
 
-            <div class="row content-block">
-                <h2>{{ model.product_name }}的下载链接</h2>
-                <div class="download" v-cloak>
-                    <ul id="download">
-                        <li v-for="item in downloads" v-html="item">
-                            {% templatetag openvariable %} item {% templatetag closevariable %}
-                        </li>
-                    </ul>
-                    {#                        {% templatetag openvariable %} 内容内容 {% templatetag closevariable %}#}
+
+            <div class="content">
+                <div class="row comment-block">
+                    <p class="side_bar_title">热评</p>
+                    <div v-cloak>
+                        <div class="comment" v-for="item in comments">
+                            <img src="http://gravatar.duoshuo.com/avatar/d312112cb7263f678cc4f080c122acdc?s=40&d=mm&r=g"
+                                 alt="">
+                            <h3>
+                                {#                            <span class="glyphicon glyphicon-user"></span>#}
+
+                                <span class="comment-info">
+                                {% templatetag openvariable %} item.user_name {% templatetag closevariable %}
+                            </span>
+                                <span class="comment-time">
+                                    ({% templatetag openvariable %} item.comment_time {% templatetag closevariable %})
+                            </span>
+                            </h3>
+                            <p class="">
+                                {% templatetag openvariable %} item.content {% templatetag closevariable %}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,12 +106,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         {% for a1 in 2222|make_list %}
                             <a href="#"
                                title="3个话题"
-                               class="side_bar_a">亲情</a>
+                               class="side_bar_a">中文</a>
                         {% endfor %}
                     {% endfor %}
                 </div>
             </div>
-            <div class="side_bar_box">
+            {% comment %}<div class="side_bar_box">
                 <p class="side_bar_title">热评</p>
                 <div v-cloak>
                     <div class="comment" v-for="item in comments">
@@ -105,7 +129,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         </p>
                     </div>
                 </div>
-            </div>
+            </div>{% endcomment %}
 
         </div>
 

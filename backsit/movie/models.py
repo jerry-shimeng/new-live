@@ -23,6 +23,9 @@ class ProductType(models.Model):
     status = models.SmallIntegerField()
     create_time = models.DateTimeField()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = "product_type"
 
@@ -34,6 +37,9 @@ class PublicDataSource(models.Model):
     source_type = models.SmallIntegerField()
     status = models.SmallIntegerField()
     create_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.source_name
 
     class Meta:
         db_table = "public_data_source"
@@ -49,6 +55,9 @@ class PublicImages(models.Model):
     status = models.SmallIntegerField()
     create_time = models.DateTimeField()
 
+    def __str__(self):
+        return self.image
+
     class Meta:
         db_table = "public_images"
 
@@ -59,6 +68,9 @@ class PublicDownloadAddress(models.Model):
     download_type = models.SmallIntegerField()
     status = models.SmallIntegerField()
     create_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.download_url
 
     class Meta:
         db_table = "public_download_address"
@@ -75,6 +87,9 @@ class ProductInfo(models.Model):
     create_time = models.DateTimeField()
     update_time = models.DateTimeField()
     order_index = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.product_name
 
     class Meta:
         db_table = "product_info"
@@ -148,3 +163,12 @@ class ProductCommentDetail(models.Model):
 
     class Meta:
         db_table = "product_comment_detail"
+
+
+# class SubmitHistory(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     product_id = models.IntegerField()
+#     submit_time = models.DateField()
+#
+#     class Meta:
+#         db_table = "submit_history"

@@ -66,6 +66,15 @@ p, a, span, i {
     text-align: center;
 }
 
+#info {
+    color: #999;
+}
+
+#info span {
+
+    line-height: 35px;
+}
+
 .info .info_ico {
     margin: 0 6px;
 }
@@ -143,8 +152,7 @@ p, a, span, i {
     color: #494949;
     word-wrap: break-word;
     margin: 1.5em 0 1em 0;
-    /*height: 1.7em;*/
-    line-height: 1.7em;
+    line-height: 1.5em;
     padding-left: 4px;
     display: block;
     font-size: 1.17em;
@@ -153,26 +161,43 @@ p, a, span, i {
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
     font-weight: bold;
+    border-bottom: 1px solid #71c6c1;
 }
 
 .comment h3 {
     background: none;
     font-size: 12px;
     height: auto;
-    margin: 0;
     padding: 0;
     overflow: hidden;
     color: #494949;
-    margin-bottom: 5px;
+    line-height: inherit;
 }
 
 .comment p {
+    color: #999;
     font-size: 12px;
     padding: 5px;
 }
 
+.comment img {
+    width: 40px;
+    position: relative;
+    float: left;
+    margin: 4px 10px 0 0;
+    border-radius: 5px;
+}
+
 .comment-info {
     color: #3382D3;
+}
+
+.comment-block {
+    margin: 20px 25px 0px 25px;
+}
+
+.comment-block p {
+    margin-top: 20px;
 }
 
 /*.container p{

@@ -6,6 +6,36 @@ from movie.models import *
 admin.site.register(SensitiveWords)
 
 
+class ProductInfoAdmin(admin.ModelAdmin):
+    list_display = ("product_name", "product_type", "source", "order_index")
+    list_per_page = 20
+    list_filter = ["source", "product_type"]
+    search_fields = ["product_name"]
+    ordering = ["-order_index"]
+
+
+class ProductImagesAdmin(admin.ModelAdmin):
+    list_display = ("product", "image")
+
+
+class ProductTypeAdmin(admin.ModelAdmin):
+    list_display = ("key", "name", "describe", "status")
+
+
+class PublicDataSourceAdmin(admin.ModelAdmin):
+    list_display = ("source_name", "key", "source_type", "status")
+
+
+class ProductDownloadDetailAdmin(admin.ModelAdmin):
+    list_display = ("product", "address")
+    search_fields = ["product"]
+
+
+admin.site.register(ProductInfo, ProductInfoAdmin)
+#admin.site.register(ProductImagesDetail, ProductImagesAdmin)
+admin.site.register(ProductType, ProductTypeAdmin)
+admin.site.register(PublicDataSource, PublicDataSourceAdmin)
+#admin.site.register(ProductDownloadDetail, ProductDownloadDetailAdmin)
 # class MovieImagesInline(admin.TabularInline):
 #     model = PublicImages
 #     extra = 1

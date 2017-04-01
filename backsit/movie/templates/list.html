@@ -3,10 +3,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <!--coustom css-->
+    {% if key %}
+        <title>{{ key }}</title>
+    {% else %}
+        <title>搜索</title>
+    {% endif %}
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
     <script src="//cdn.bootcss.com/vue/2.2.4/vue.js"></script>
 </head>
@@ -20,7 +22,6 @@
 <div class="container list">
     <div class="row">
         <div class="col-md-9 content">
-
             <div class="row">
                 <div class="col-md-8 list-search">
                     <form action="{% url 'search' %}" method="get" class="input-group">
@@ -42,7 +43,8 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-md-10">
-                                    <div>[电影] <a href="{% url 'detail' l.id %}" target="_blank">{{ l.name }}</a></div>
+                                    <div>[电影] <a href="{% url 'detail' l.id %}" target="_blank">{{ l.product_name }}</a>
+                                    </div>
                                     <div>上映时间：{{ l.release_time }}</div>
                                     <p>{{ l.content|striptags|slice:"100" }}...</p>
                                 </div>
@@ -56,6 +58,7 @@
 
                 </ul>
             </div>
+
         </div>
 
         <div class="col-md-3" style="padding: 20px;">

@@ -40,17 +40,25 @@ class IndexView(generic.ListView):
 
     def queryset(self, key=None, page=1):
         r = None
-        if key is None:
-            r = DataBaseAccess.get_product_list(page)
-        else:
-            r = DataBaseAccess.get_product_list_by_search(key, page)
-        return r
+        try:
+            if key is None:
+                r = DataBaseAccess.get_product_list(page)
+            else:
+                r = DataBaseAccess.get_product_list_by_search(key, page, size=20)
+            return r
+        except:
+            return None
 
     def index(self, request):
         list = self.queryset()
-        print(list)
         return render(request, self.template_name,
                       {"movie_list": list, "total_count": self.get_page_count(), "pager": 1})
+
+    def help(self, request):
+        return render(request, "help.html", {})
+
+    def contact(self, request):
+        return render(request, "contact.html", {})
 
     def page(self, request, page):
 
@@ -67,6 +75,9 @@ class IndexView(generic.ListView):
         page = request.GET.get("page")
         if key is None:
             key = ""
+        else:
+            key = key.strip()
+
         if page is None:
             page = 1
         page = int(page)

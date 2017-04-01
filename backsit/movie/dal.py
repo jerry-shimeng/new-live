@@ -18,14 +18,14 @@ class DataBaseAccess:
         return cls.get_movie_list(products)
 
     @classmethod
-    def get_product_list_by_search(cls, key, page=1):
+    def get_product_list_by_search(cls, key, page=1, size=page_size):
         product_type_id = cls.get_movie_product_type().id
 
         products = ProductInfo.objects.filter(product_type=product_type_id, status=1,
                                               product_name__contains=key).order_by("-update_time")[
-                   (page - 1) * page_size:page_size * page]
+                   (page - 1) * size:size * page]
 
-        return cls.movie_list(products)
+        return cls.get_movie_list(products)
 
     @classmethod
     def get_movie_list(cls, products):

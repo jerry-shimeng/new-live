@@ -47,3 +47,8 @@ class ProductCommentApi(generic.ListView):
         except:
             pass
         return HttpResponse(json.dumps(list, ensure_ascii=False))
+
+
+class ProductInfoApi(generic.DetailView):
+    def submit_data(self, request):
+        pass

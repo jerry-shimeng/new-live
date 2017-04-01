@@ -15,6 +15,8 @@ urlpatterns = [
     url(r"^page/(?P<page>[0-9]+)$", views.IndexView().page, name="page"),
     url(r"^detail/(?P<pk>[0-9]+)$", views.DetailView().get_detail, name="detail"),
     url(r"^search", views.IndexView().search, name="search"),
+    url(r"^help", views.IndexView().help, name="help"),
+    url(r"^contact", views.IndexView().contact, name="contact"),
 
     url(r'^api/down/(?P<id>[0-9]+)$', ProductDownloadUrlApi().get, name="down_url"),
     url(r'^api/comment/(?P<id>[0-9]+)$', ProductCommentApi().get, name="product_comment"),
