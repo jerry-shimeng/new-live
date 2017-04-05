@@ -82,6 +82,7 @@ class IndexView(generic.ListView):
             page = 1
         page = int(page)
         r = self.queryset(key=key, page=page)
+        
         return render(request, "list.html", {"movie_list": r, "key": key})
 
     def get_page_count(self):

@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 
-from movie.restapi import ProductDownloadUrlApi, ProductCommentApi
+from movie.restapi import ProductDownloadUrlApi, ProductCommentApi, ProductInfoApi
 from . import views
 
 # router = routers.DefaultRouter()
@@ -20,6 +20,7 @@ urlpatterns = [
 
     url(r'^api/down/(?P<id>[0-9]+)$', ProductDownloadUrlApi().get, name="down_url"),
     url(r'^api/comment/(?P<id>[0-9]+)$', ProductCommentApi().get, name="product_comment"),
+    url(r'^api/product$', ProductInfoApi().submit_data, name="product_submit"),
     # url(r'^down/', MovieDownloadUrlView.as_view()),
 ]
 # urlpatterns = format_suffix_patterns(urlpatterns)

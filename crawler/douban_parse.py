@@ -88,6 +88,10 @@ class DoubanContentParser:
         rating = 0
         if not content.find(class_="rating_num") is None:
             rating = content.find(class_="rating_num").string
+        
+        if rating is None or len(rating) == 0:
+            rating = 0
+        
         # 评分人数
         rating_sum_tag = content.find(class_="rating_sum").a.span
         rating_sum = 0
@@ -101,10 +105,10 @@ class DoubanContentParser:
         # 电影播放/拍摄 国家
         area = self.get_area(content)
         # 简介
-        desc = None
+        con = ""
         if not content.find(id="link-report") is None and not content.find(id="link-report").span is None:
             desc = content.find(id="link-report").find(class_="all")
-            con = ""
+            
             if desc is None:
                 con = content.find(id="link-report").span.string
             else:
@@ -113,8 +117,13 @@ class DoubanContentParser:
                         con = con + tag.string
             if not con is None:
                 con = con.strip()
+        if con is None:
+            con = "  "
         # 影评
-        comments = self.get_comments(content)
+        try:
+            comments = self.get_comments(content)
+        except:
+            comments =[]
 
         result = {"sub_name": name, "rating": rating, "rating_sum": rating_sum, "image_url": image_url, "about": about,
                   "content": con, "comments": comments, "area": area, "images": None}
