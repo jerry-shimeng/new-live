@@ -1,37 +1,14 @@
-import json
-
-from django.forms import model_to_dict
-from django.http import HttpResponse
+import logging
 from django.shortcuts import render, get_object_or_404
 
-# Create your views here.
-from django.template import loader, RequestContext
 from django.views import generic
 
 from movie.dal import DataBaseAccess
 from movie.models import *
 
-# def index(request):
-#     movie_list = MovieDetail.objects.order_by("id")[:10]
-#     # output = ",".join([p.name for p in movie_list])
-#     # template = loader.get_template("./index.html")
-#     # context = RequestContext(request, {
-#     #     "movie_list": movie_list,
-#     # })
-#     # return HttpResponse(template.render(context))
-#     context = {"movie_list": movie_list}
-#     return render(request, "index.html", context)
-#
-#
-# def detail(request, id):
-#     # model = MovieDetail.objects.get(pk=id)
-#     # print(model)
-#     # return HttpResponse(model)
-#     model = get_object_or_404(MovieDetail, pk=id)
-#     return render(request, "detail.html", {"model": model})
-
-
 page_size = 9
+
+logger = logging.getLogger()
 
 
 class IndexView(generic.ListView):
@@ -46,7 +23,8 @@ class IndexView(generic.ListView):
             else:
                 r = DataBaseAccess.get_product_list_by_search(key, page, size=20)
             return r
-        except:
+        except Exception as e:
+            logger.error("queryset ", e)
             return None
 
     def index(self, request):
@@ -62,7 +40,7 @@ class IndexView(generic.ListView):
 
     def page(self, request, page):
 
-        if page is None:
+        if page is None or page <= 0:
             page = 1
         page = int(page)
         r = self.queryset(page=page)
