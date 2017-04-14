@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import httplib2
 
+import socks
 from http_utility import HttpUtility
 
 url = 'http://www.kuaidaili.com/free/inha/'
@@ -28,6 +29,6 @@ class ProxyParser(object):
 
     @classmethod
     def test(cls, host, port):
-        hp = httplib2.Http(proxy_info=httplib2.ProxyInfo(3, host, port))
+        hp = httplib2.Http(proxy_info=httplib2.ProxyInfo(socks.PROXY_TYPE_HTTP, host, port))
         h, c = hp.request("http://www.facebook.com")
         print(h, "\n", c)
