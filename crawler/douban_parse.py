@@ -15,25 +15,32 @@ douban_sorce = "douban"
 
 
 class DoubanContentParser:
-    search_url = "https://www.douban.com/search?q=%s"
+    search_url = "https://www.douban.com/search?cat=1002&q=%s"
     sub_search_url = "https://movie.douban.com/subject_search?search_text=%s"
 
     @classmethod
     def run(cls):
         # 获取数据源非豆瓣的list（size=10）
         list = DatabaseAccess.get_product_by_source(douban_sorce)
-        # print(list)
-        while list is not None and len(list) > 0:
+        print(len(list))
+        if list is not None and len(list) > 0:
             for l in list:
                 result = cls(l.product_name).start()
                 if result is None:
+                    print("not found  ", l.product_name)
+                    DatabaseAccess.update_fail(l.id)
                     continue
                 try:
                     DatabaseAccess.save_as_douban(l, result, douban_sorce)
                 except Exception as e:
+                    # 更新状态为3，获取源数据失败
+                    DatabaseAccess.update_fail(l.id)
                     print(e)
             time.sleep(10)
-            cls.run()
+
+        list = None
+        time.sleep(20)
+        cls.run()
 
     def __init__(self, name):
         self.movie_name = name
@@ -88,15 +95,18 @@ class DoubanContentParser:
         rating = 0
         if not content.find(class_="rating_num") is None:
             rating = content.find(class_="rating_num").string
-        
+
         if rating is None or len(rating) == 0:
             rating = 0
-        
+
         # 评分人数
-        rating_sum_tag = content.find(class_="rating_sum").a.span
         rating_sum = 0
-        if not rating_sum_tag is None:
-            rating_sum = rating_sum_tag.string
+        try:
+            rating_sum_tag = content.find(class_="rating_sum").a.span
+            if not rating_sum_tag is None:
+                rating_sum = rating_sum_tag.string
+        except:
+            pass
 
         # 海报
         image_url = content.find(id="mainpic").a.img["src"]
@@ -108,7 +118,7 @@ class DoubanContentParser:
         con = ""
         if not content.find(id="link-report") is None and not content.find(id="link-report").span is None:
             desc = content.find(id="link-report").find(class_="all")
-            
+
             if desc is None:
                 con = content.find(id="link-report").span.string
             else:
@@ -123,7 +133,7 @@ class DoubanContentParser:
         try:
             comments = self.get_comments(content)
         except:
-            comments =[]
+            comments = []
 
         result = {"sub_name": name, "rating": rating, "rating_sum": rating_sum, "image_url": image_url, "about": about,
                   "content": con, "comments": comments, "area": area, "images": None}

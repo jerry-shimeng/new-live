@@ -14,9 +14,17 @@ features = "lxml"
 # 第二页地址 http://www.lbldy.com/movie/page/2/
 
 class WebSitParser:
-    def __init__(self, url):
+    def __init__(self, url, page=1):
         self.url = url
-        pass
+        self.page = page
+
+    def run(self):
+        while True:
+            print(self.page)
+            self.parse_list(self.page)
+            if self.page > 1:
+                self.page = self.page - 1
+            time.sleep(10)
 
     # 获取电影列表
     def parse_list(self, page=1):
@@ -30,7 +38,10 @@ class WebSitParser:
         h = HttpUtility(url)
         html = h.get()
         soup = BeautifulSoup(html, features)
-        list = soup.find(id="center").find_all(class_="postlist")
+        list = soup.find(id="center")
+        if list is None:
+            return
+        list = list.find_all(class_="postlist")
 
         # 没有数据的时候结束
         if list is None or len(list) == 0:
@@ -38,16 +49,15 @@ class WebSitParser:
         for l in list:
             self.parse_about(l)
             time.sleep(1)
-        # 递归获取数据
-        self.parse_list(page - 1)
-        pass
 
     # 获取电影简介
     def parse_about(self, about):
         name = about.h4.a["title"]
         url = about.h4.a["href"]
-        self.parse_detail(url)
-        pass
+        try:
+            self.parse_detail(url)
+        except:
+            pass
 
     # 获取电影详情
     def parse_detail(self, url):

@@ -51,16 +51,22 @@ class IndexView(generic.ListView):
     def search(self, request):
         key = request.GET.get("key")
         page = request.GET.get("page")
+        order = request.GET.get("order")
         if key is None:
             key = ""
         else:
             key = key.strip()
 
+        if order is None:
+            order = 1
+        #获取排序的key
+
+
         if page is None:
             page = 1
         page = int(page)
         r = self.queryset(key=key, page=page)
-        
+
         return render(request, "list.html", {"movie_list": r, "key": key})
 
     def get_page_count(self):

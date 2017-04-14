@@ -28,13 +28,20 @@
                         <input type="text" class="form-control" placeholder="Search for..." value="{{ key }}"
                                name="key">
                         <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">search</button>
-                    </span>
+                            <button class="btn btn-default" type="submit">search</button>
+                        </span>
                     </form>
                 </div><!-- /input-group -->
             </div>
             <div class="row ">
-
+                <div class="sort-row">
+                    <ul>
+                        <li><a href="/search?key={{ key }}&order=1">默认排序</a></li>
+                        <li><a href="/search?key={{ key }}&order=2">最高评分</a></li>
+                        <li><a href="/search?key={{ key }}&order=3">最多人看</a></li>
+                        <li><a href="/search?key={{ key }}&order=4">上映时间</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="row ">
 
