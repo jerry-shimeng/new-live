@@ -61,6 +61,7 @@ p, a, span, i {
     text-overflow: ellipsis;
     position: relative;
     border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
     line-height: 35px;
     padding: 0 5px;
     text-align: center;

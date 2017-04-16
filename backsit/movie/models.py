@@ -99,7 +99,7 @@ class ProductMovieDetail(models.Model):
 	id = models.AutoField(primary_key=True)
 	product_name = models.CharField(max_length=200)
 	product_alias = models.CharField(max_length=200)
-	rating = models.FloatField(default=0)
+	rating = models.CharField(null=True, max_length=500)
 	rating_sum = models.IntegerField(default=0)
 	release_time = models.DateField(null=True, blank=True, default=datetime.date.today())
 	about = models.TextField(null=True)
@@ -107,6 +107,7 @@ class ProductMovieDetail(models.Model):
 	# tag = models.CharField(max_length=100, null=True)
 	area = models.CharField(max_length=100, null=True)
 	status = models.SmallIntegerField(default=1)
+	douban_id = models.IntegerField(null=True)
 	
 	def get_desc(self):
 		return self.content[0:20] + "..."

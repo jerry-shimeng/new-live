@@ -11,6 +11,7 @@
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
     <script src="//cdn.bootcss.com/vue/2.2.4/vue.js"></script>
+    <script src="{% static 'js/laypage/laypage.js' %}"></script>
 </head>
 <body>
 
@@ -52,7 +53,18 @@
                                 <div class="col-md-10">
                                     <div>[电影] <a href="{% url 'detail' l.id %}" target="_blank">{{ l.product_name }}</a>
                                     </div>
-                                    <div>上映时间：{{ l.release_time }}</div>
+
+                                    <div class="">
+                                        <span class="info_date info_ico" title="上映时间"><em
+                                        class="glyphicon glyphicon-calendar"></em> {{ l.release_time }}</span>
+                                        <span class="info_views info_ico" title="评价人数"><em
+                                                class="glyphicon glyphicon-eye-open"></em> {{ l.rating_sum }}</span>
+                                        <span class="info_comment info_ico" title="豆瓣评分"><em
+                                                class="glyphicon glyphicon-star"></em> {{ l.rating }}</span>
+                                        <span class="info_category info_ico" title="类别"><em
+                                                class="glyphicon glyphicon-tag"></em> {{ l.area }}</span>
+                                    </div>
+                                    <br>
                                     <p>{{ l.content|striptags|slice:"100" }}...</p>
                                 </div>
                                 <div class="col-md-2">
@@ -60,12 +72,17 @@
                                 </div>
 
                             </div>
+
                         </li>
                     {% endfor %}
 
                 </ul>
             </div>
+            <div class="row">
+                <div id="page">
 
+                </div>
+            </div>
         </div>
 
         <div class="col-md-3" style="padding: 20px;">
@@ -89,6 +106,73 @@
 
 
 {% include 'footer.html' %}
+<script>
 
+    var jump_page = function (page) {
+        var url = window.location.href;
+        if (url.indexOf("page=") < 0) {
+            if (url.indexOf("?") < 0) {
+                url = url + "?page=" + page;
+            } else {
+                url = url + "&page=" + page;
+            }
+        } else {
+            var start = url.indexOf("page=") + "page=".length;
+            var end = url.indexOf("&", start);
+            if (end < 0 || end < start) {
+                url = url.substring(0, start) + page;
+            } else {
+                var a = url.substring(0, start);
+                var b = url.substring(end, url.length);
+                url = a + page + b;
+            }
+        }
+
+        window.location.href = url;
+    };
+
+    var get_page = function () {
+        var url = window.location.href;
+        if (url.indexOf("page=") < 0)
+            return 1;
+
+        var page = 1;
+
+        var start = url.indexOf("page=") + "page=".length;
+        var end = url.indexOf("&", start);
+        if (end < 0 || end < start) {
+            var a = url.substring(start, url.length);
+            page = parseInt(a);
+        } else {
+            var a = url.substring(start, end);
+            page = parseInt(a);
+        }
+
+        return page;
+
+    };
+
+    laypage({
+        cont: 'page', //容器。值支持id名、原生dom对象，jquery对象,
+        pages: {{ total_count }}, //总页数
+        skin: 'molv', //皮肤
+        curr: get_page(),
+        first: 1, //将首页显示为数字1,。若不显示，设置false即可
+        last: {{ total_count }}, //将尾页显示为总页数。若不显示，设置false即可
+        prev: '<', //若不显示，设置false即可
+        next: '>', //若不显示，设置false即可
+        jump: function (obj) {
+            var curr = obj.curr;
+            console.log(get_page());
+            console.log(curr);
+            if (curr == get_page()) {
+                return;
+            }
+            jump_page(curr);
+        }
+    });
+
+
+</script>
 </body>
 </html>

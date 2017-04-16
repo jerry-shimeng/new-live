@@ -118,8 +118,9 @@ class DatabaseAccess:
         detail.rating = result["rating"]
         detail.rating_sum = result["rating_sum"]
         detail.status = 1
+        detail.douban_id = result["id"]
         detail.save()
-
+        
         img = PublicImages()
         img.image = result["image_url"]
         img.img_type = 1

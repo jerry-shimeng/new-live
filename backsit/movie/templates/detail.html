@@ -44,8 +44,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <img src="{{ model.images.image }}">
                         {#                    <img src="{% static 'images/test.webp' %}" >#}
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <p>{{ model.about|safe }}</p>
+                    </div>
+                    <div class="col-md-2">
+                        <span>豆瓣评分</span>
+                        <h1>{{ model.rating }}</h1>
                     </div>
                 </div>
 

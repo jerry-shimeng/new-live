@@ -3,6 +3,7 @@ import threading
 
 import time
 
+from douban_api import DoubanApi
 from douban_parse import DoubanContentParser
 from sit_parse import WebSitParser
 from sync_data import AsyncData
@@ -12,12 +13,19 @@ start_page = 5
 
 
 def get_new_res():
-    url = UrlHub.get_url()
-    WebSitParser(url, start_page).run()
+	try:
+		url = UrlHub.get_url()
+		WebSitParser(url, start_page).run()
+	except:
+		get_new_res()
 
 
 def get_douban_info():
-    DoubanContentParser.run()
+	try:
+		# DoubanContentParser.run()
+		DoubanApi.run()
+	except:
+		get_douban_info()
 
 
 threads = []
@@ -27,10 +35,10 @@ t2 = threading.Thread(target=get_douban_info)
 threads.append(t2)
 
 if __name__ == "__main__":
-    # 获取 资源
-    for t in threads:
-        t.setDaemon(True)
-        t.start()
-
-    while True:
-        time.sleep(50)
+	# 获取 资源
+	for t in threads:
+		t.setDaemon(True)
+		t.start()
+	
+	while True:
+		time.sleep(50)
