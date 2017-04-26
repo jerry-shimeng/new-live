@@ -49,7 +49,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </div>
                     <div class="col-md-2">
                         <span>豆瓣评分</span>
-                        <h1>{{ model.rating }}</h1>
+                        <h1 id="average" style="display: none">{{ model.rating }}</h1>
                     </div>
                 </div>
 
@@ -180,6 +180,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             });
         });
         getComments();
+
+        $("#average").html(JSON.parse($("#average").html()).average).show();
+
     });
 
 

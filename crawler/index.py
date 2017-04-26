@@ -2,6 +2,7 @@
 import threading
 
 import time
+import traceback
 
 from douban_api import DoubanApi
 from douban_parse import DoubanContentParser
@@ -9,7 +10,7 @@ from sit_parse import WebSitParser
 from sync_data import AsyncData
 from url_hub import UrlHub
 
-start_page = 5
+start_page = 3
 
 
 def get_new_res():
@@ -17,6 +18,8 @@ def get_new_res():
 		url = UrlHub.get_url()
 		WebSitParser(url, start_page).run()
 	except:
+		traceback.print_exc()
+		print("get_new_res recall")
 		get_new_res()
 
 
@@ -25,6 +28,8 @@ def get_douban_info():
 		# DoubanContentParser.run()
 		DoubanApi.run()
 	except:
+		traceback.print_exc()
+		print("get_douban_info recall")
 		get_douban_info()
 
 

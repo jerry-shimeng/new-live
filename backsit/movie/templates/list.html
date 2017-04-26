@@ -56,11 +56,12 @@
 
                                     <div class="">
                                         <span class="info_date info_ico" title="上映时间"><em
-                                        class="glyphicon glyphicon-calendar"></em> {{ l.release_time }}</span>
+                                                class="glyphicon glyphicon-calendar"></em> {{ l.release_time }}</span>
                                         <span class="info_views info_ico" title="评价人数"><em
                                                 class="glyphicon glyphicon-eye-open"></em> {{ l.rating_sum }}</span>
                                         <span class="info_comment info_ico" title="豆瓣评分"><em
-                                                class="glyphicon glyphicon-star"></em> {{ l.rating }}</span>
+                                                class="glyphicon glyphicon-star"></em> <span class="average"
+                                                                                             style="display: none">{{ l.rating }}</span> </span>
                                         <span class="info_category info_ico" title="类别"><em
                                                 class="glyphicon glyphicon-tag"></em> {{ l.area }}</span>
                                     </div>
@@ -106,7 +107,18 @@
 
 
 {% include 'footer.html' %}
+<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
 <script>
+
+    $(function () {
+
+        for (var i = 0; i < $(".average").length; i++) {
+            var v = $(".average")[i];
+            var s = $(v).html();
+            var ob = JSON.parse(s);
+            $(v).html(ob.average).show();
+        }
+    });
 
     var jump_page = function (page) {
         var url = window.location.href;

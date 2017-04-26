@@ -56,7 +56,8 @@
                                     <span class="info_views info_ico" title="评价人数"><em
                                             class="glyphicon glyphicon-eye-open"></em> {{ movie.rating_sum }}</span>
                                     <span class="info_comment info_ico" title="豆瓣评分"><em
-                                            class="glyphicon glyphicon-star"></em> {{ movie.rating }}</span>
+                                            class="glyphicon glyphicon-star"></em> <span class="average"
+                                                                                         style="display: none">{{ movie.rating }}</span> </span>
                                     <span class="info_category info_ico" title="类别"><em
                                             class="glyphicon glyphicon-tag"></em> {{ movie.area }}</span>
                                 </div>
@@ -183,6 +184,18 @@
                 {% comment %} var result = image.isLoaded ? 'loaded' : 'broken';
                  console.log('image is ' + result + ' for ' + image.img.src);{% endcomment %}
             });
+
+
+        {
+
+            for (var i = 0; i < $(".average").length; i++) {
+                var v = $(".average")[i];
+                var s = $(v).html();
+                var ob = JSON.parse(s);
+                $(v).html(ob.average).show();
+            }
+
+        }
     });
 
 

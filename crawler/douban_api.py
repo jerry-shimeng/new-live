@@ -1,4 +1,5 @@
 import json
+import traceback
 
 import httplib2
 import time
@@ -22,9 +23,10 @@ class DoubanApi:
 	@classmethod
 	def run(cls):
 		list = DatabaseAccess.get_product_by_source(douban_sorce)
-		print(len(list))
+		# print(len(list))
 		if list is not None and len(list) > 0:
 			for l in list:
+				print("douban source ", l.product_name)
 				result = cls.start(l.product_name)
 				if result is None:
 					print("not found  ", l.product_name)
@@ -36,9 +38,10 @@ class DoubanApi:
 					print("save_db error", e)
 					# 更新状态为3，获取源数据失败
 					DatabaseAccess.update_fail(l.id)
-				time.sleep(2)
+				time.sleep(60)
 		
 		list = None
+		time.sleep(10)
 		cls.run()
 	
 	@classmethod
@@ -48,7 +51,8 @@ class DoubanApi:
 			res = cls.detail(id)
 			return res
 		except Exception as e:
-			print("get detail error", e)
+			traceback.print_exc()
+			print("get detail error")
 			return None
 	
 	@classmethod
@@ -69,13 +73,13 @@ class DoubanApi:
 		url = search_url % name
 		content = cls.get(url)
 		obj = json.loads(content)
-		if obj["total"] == 0:
+		if "total" in obj.keys() and obj["total"] == 0:
 			print("not result for ", name)
 			return
 		
 		for a in obj["subjects"]:
 			if name.__contains__(a["title"]) or a["title"].__contains__(name):
-				print(a["id"])
+				# print(a["id"])
 				return int(a["id"])
 		return 0
 	

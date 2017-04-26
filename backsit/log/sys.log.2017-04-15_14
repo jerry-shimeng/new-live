@@ -1,0 +1,4 @@
+INFO 2017-04-15 14:31:34,334 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /search?key=&order=1&page=83 HTTP/1.1" 200 15319
+INFO 2017-04-15 14:31:34,359 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2017-04-15 14:31:37,381 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /search?key=&order=1&page=1 HTTP/1.1" 200 26463
+INFO 2017-04-15 14:31:41,234 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET / HTTP/1.1" 200 27927
