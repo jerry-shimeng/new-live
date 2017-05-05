@@ -1,9 +1,0 @@
-INFO 2017-04-15 04:59:37,811 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /static/css/style.css HTTP/1.1" 304 0
-INFO 2017-04-15 04:59:38,883 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET / HTTP/1.1" 200 27927
-INFO 2017-04-15 04:59:40,654 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET / HTTP/1.1" 200 27927
-INFO 2017-04-15 04:59:57,302 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /search?key=&order=2 HTTP/1.1" 200 25311
-INFO 2017-04-15 04:59:57,338 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /static/css/style.css HTTP/1.1" 304 0
-INFO 2017-04-15 05:00:00,066 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /detail/674 HTTP/1.1" 200 14442
-INFO 2017-04-15 05:00:00,292 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /api/comment/674 HTTP/1.1" 200 1943
-INFO 2017-04-15 05:00:00,320 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /api/down/674 HTTP/1.1" 200 1321
-INFO 2017-04-15 05:00:02,052 /usr/local/lib/python3.6/site-packages/django/core/servers/basehttp.py basehttp.py basehttp log_message 131: "GET /static/js/layer/skin/default/icon.png HTTP/1.1" 200 11493

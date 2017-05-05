@@ -108,7 +108,7 @@ class DatabaseAccess:
 		source_id = cls.get_data_source(source).id
 		
 		list = ProductInfo.filter(ProductInfo.source != source_id, ProductInfo.status == 0).order_by(
-			ProductInfo.id.desc())[0:10]
+			ProductInfo.order_index.desc())[0:10]
 		return list
 	
 	# 保存豆瓣数据

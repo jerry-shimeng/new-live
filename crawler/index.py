@@ -6,11 +6,12 @@ import traceback
 
 from douban_api import DoubanApi
 from douban_parse import DoubanContentParser
+from proxy_parser import ProxyParser
 from sit_parse import WebSitParser
 from sync_data import AsyncData
 from url_hub import UrlHub
 
-start_page = 3
+start_page = 2
 
 
 def get_new_res():
@@ -40,6 +41,8 @@ t2 = threading.Thread(target=get_douban_info)
 threads.append(t2)
 
 if __name__ == "__main__":
+	ProxyParser.run()
+	
 	# 获取 资源
 	for t in threads:
 		t.setDaemon(True)

@@ -87,18 +87,19 @@
         </div>
 
         <div class="col-md-3" style="padding: 20px;">
-            <div class="side_bar_box">
-                <p class="side_bar_title">标题</p>
-                <div>
-                    {% for a1 in 2222|make_list %}
-                        {% for a1 in 2222|make_list %}
-                            <a href="#"
-                               title="3个话题"
-                               class="side_bar_a">亲情</a>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            </div>
+{#            侧边栏，暂时隐藏#}
+{#            <div class="side_bar_box">#}
+{#                <p class="side_bar_title">标题</p>#}
+{#                <div>#}
+{#                    {% for a1 in 2222|make_list %}#}
+{#                        {% for a1 in 2222|make_list %}#}
+{#                            <a href="#"#}
+{#                               title="3个话题"#}
+{#                               class="side_bar_a">亲情</a>#}
+{#                        {% endfor %}#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{#            </div>#}
         </div>
 
     </div>
@@ -185,6 +186,20 @@
     });
 
 
+</script>
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
 </script>
 </body>
 </html>

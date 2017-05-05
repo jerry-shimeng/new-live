@@ -74,8 +74,8 @@ class WebSitParser:
 		name = name[name.index("《") + 1:name.index("》")]
 		
 		# 验证电影名称是否存在，如存在不继续获取
-		if DatabaseAccess.exist_name(name):
-			return
+		# if DatabaseAccess.exist_name(name):
+		# 	return
 		
 		# 更新时间
 		time = detail.find(class_="postmeat").text
@@ -171,3 +171,8 @@ class WebSitParser:
 			DatabaseAccess.save_as_lbl(d_map)
 		except Exception as e:
 			print("save ", e)
+
+
+if __name__ == "__main__":
+	url = "http://www.lbldy.com/movie/74971.html"
+	WebSitParser("").parse_detail(url)
