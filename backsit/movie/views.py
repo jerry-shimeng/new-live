@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 
 from django.views import generic
 
+from movie.config import AppConfig
 from movie.dal import DataBaseAccess
 from movie.models import *
 
@@ -32,13 +33,13 @@ class IndexView(generic.ListView):
 	def index(self, request):
 		list, count = self.queryset()
 		return render(request, self.template_name,
-		              {"movie_list": list, "total_count": self.get_page_count(count), "pager": 1})
+		              {"movie_list": list, "config": AppConfig, "total_count": self.get_page_count(count), "pager": 1})
 	
 	def help(self, request):
-		return render(request, "help.html", {})
+		return render(request, "help.html", {"config": AppConfig})
 	
 	def contact(self, request):
-		return render(request, "contact.html", {})
+		return render(request, "contact.html", {"config": AppConfig})
 	
 	def page(self, request, page):
 		
@@ -50,7 +51,7 @@ class IndexView(generic.ListView):
 		
 		r, count = self.queryset(page=page)
 		return render(request, self.template_name,
-		              {"movie_list": r, "total_count": self.get_page_count(count), "pager": page})
+		              {"movie_list": r, "total_count": self.get_page_count(count), "pager": page,"config": AppConfig})
 	
 	# 查询结果
 	def search(self, request):
@@ -72,7 +73,7 @@ class IndexView(generic.ListView):
 		page = int(page)
 		r, count = self.queryset(key=key, page=page, order=order)
 		
-		return render(request, "list.html", {"movie_list": r, "total_count": self.get_page_count(count), "key": key})
+		return render(request, "list.html", {"movie_list": r, "total_count": self.get_page_count(count), "key": key,"config": AppConfig})
 	
 	def get_page_count(self, count):
 		a = 1
@@ -101,4 +102,4 @@ class DetailView(generic.DetailView):
 	
 	def get_detail(self, request, pk):
 		m = DataBaseAccess.get_product_detail(pk)
-		return render(request, self.template_name, {"model": m})
+		return render(request, self.template_name, {"model": m,"config": AppConfig})

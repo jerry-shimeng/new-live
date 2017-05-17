@@ -31,14 +31,17 @@ class DoubanApi:
 				result = cls.start(l.product_name)
 				if result is None:
 					print("not found  ", l.product_name)
-					DatabaseAccess.update_fail(l.id)
-					continue
-				try:
-					cls.save_db(l, result)
-				except Exception as e:
-					print("save_db error", e)
-					# 更新状态为3，获取源数据失败
-					DatabaseAccess.update_fail(l.id)
+					# DatabaseAccess.update_fail(l.id)
+					time.sleep(60)
+				else:
+					try:
+						cls.save_db(l, result)
+					except Exception as e:
+						traceback.print_exc()
+						print("save_db error", result["name"])
+						# 更新状态为3，获取源数据失败
+						DatabaseAccess.update_fail(l.id)
+						
 				time.sleep(20)
 		
 		list = None
@@ -53,7 +56,7 @@ class DoubanApi:
 			return res
 		except Exception as e:
 			traceback.print_exc()
-			print("get detail error")
+			print("get detail error", name)
 			return None
 	
 	@classmethod

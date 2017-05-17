@@ -2,11 +2,13 @@
 <!doctype html>
 <html>
 <head>
-    <title>雨后花园</title>
+    <title>{{ config.title_key }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="keywords" content="雨后花园,上映电影,最新电影,电影,最新"/>
+    <meta name="keywords" content="{{ config.keywords }}"/>
+    <meta name="description" content="{{ config.description }}">
     <meta name="baidu-site-verification" content="nTgWlPp78M" />
+    <meta name="msvalidate.01" content="C377EB7A3709FB34366ED2C285ED69DC" />
     <script type="application/x-javascript">
         addEventListener("load", function () {
             setTimeout(hideURLbar, 0);
@@ -128,10 +130,10 @@
 
                     {% if pager == total_count %}
                         <li class="disabled"><a href="javascript:;" aria-label="Previous"><span
-                                aria-hidden="true">&raquo;</span></a></li>
+                                aria-hidden="true">上一页</span></a></li>
                     {% else %}
                         <li class=""><a href="{% url 'page' pager|add:1 %}" aria-label="Previous"><span
-                                aria-hidden="true">&raquo;</span></a></li>
+                                aria-hidden="true">下一页</span></a></li>
                         <li class=""><a href="{% url 'page'  total_count %}" aria-label="Previous"><span
                                 aria-hidden="true">尾页</span></a></li>
                     {% endif %}

@@ -2,10 +2,11 @@
 <!doctype html>
 <html>
 <head>
-    <title>Home</title>
+    <title>{{ model.product_name }}_{{ config.title_key }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta name="keywords" content="雨后花园,最新电影,上映电影,电影,最新,{{ model.product_name }}"/>
+    <meta name="keywords" content="{{ model.product_name }},{{ config.keywords }}"/>
+    <meta name="description" content="{{ model.product_name }},{{ config.description }}">
     <script type="application/x-javascript"> addEventListener("load", function () {
         setTimeout(hideURLbar, 0);
     }, false);
@@ -102,18 +103,18 @@
         </div>
 
         <div class="col-md-3" style="padding: 20px;">
-{#            <div class="side_bar_box">#}
-{#                <p class="side_bar_title">标题</p>#}
-{#                <div>#}
-{#                    {% for a1 in 2222|make_list %}#}
-{#                        {% for a1 in 2222|make_list %}#}
-{#                            <a href="#"#}
-{#                               title="3个话题"#}
-{#                               class="side_bar_a">中文</a>#}
-{#                        {% endfor %}#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
+            {#            <div class="side_bar_box">#}
+            {#                <p class="side_bar_title">标题</p>#}
+            {#                <div>#}
+            {#                    {% for a1 in 2222|make_list %}#}
+            {#                        {% for a1 in 2222|make_list %}#}
+            {#                            <a href="#"#}
+            {#                               title="3个话题"#}
+            {#                               class="side_bar_a">中文</a>#}
+            {#                        {% endfor %}#}
+            {#                    {% endfor %}#}
+            {#                </div>#}
+            {#            </div>#}
             {% comment %}<div class="side_bar_box">
                 <p class="side_bar_title">热评</p>
                 <div v-cloak>
@@ -160,21 +161,20 @@
     });
 </script>
 <script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
 </script>
 <script>
-
 
 
     var download = [];

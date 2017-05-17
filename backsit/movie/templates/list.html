@@ -3,10 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="{{ config.keywords }}"/>
+    <meta name="description" content="{{ config.description }}">
     {% if key %}
-        <title>{{ key }}</title>
+        <title>{{ key }}_{{ config.title_key }}</title>
     {% else %}
-        <title>搜索</title>
+        <title>搜索_{{ config.title_key }}</title>
     {% endif %}
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
@@ -87,19 +91,19 @@
         </div>
 
         <div class="col-md-3" style="padding: 20px;">
-{#            侧边栏，暂时隐藏#}
-{#            <div class="side_bar_box">#}
-{#                <p class="side_bar_title">标题</p>#}
-{#                <div>#}
-{#                    {% for a1 in 2222|make_list %}#}
-{#                        {% for a1 in 2222|make_list %}#}
-{#                            <a href="#"#}
-{#                               title="3个话题"#}
-{#                               class="side_bar_a">亲情</a>#}
-{#                        {% endfor %}#}
-{#                    {% endfor %}#}
-{#                </div>#}
-{#            </div>#}
+            {#            侧边栏，暂时隐藏#}
+            {#            <div class="side_bar_box">#}
+            {#                <p class="side_bar_title">标题</p>#}
+            {#                <div>#}
+            {#                    {% for a1 in 2222|make_list %}#}
+            {#                        {% for a1 in 2222|make_list %}#}
+            {#                            <a href="#"#}
+            {#                               title="3个话题"#}
+            {#                               class="side_bar_a">亲情</a>#}
+            {#                        {% endfor %}#}
+            {#                    {% endfor %}#}
+            {#                </div>#}
+            {#            </div>#}
         </div>
 
     </div>
@@ -188,18 +192,18 @@
 
 </script>
 <script>
-(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https') {
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    }
-    else {
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-})();
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
 </script>
 </body>
 </html>
