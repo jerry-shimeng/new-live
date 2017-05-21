@@ -3,6 +3,7 @@ from playhouse.shortcuts import model_to_dict
 from config import async_url
 from db_access import DatabaseAccess
 from http_utility import HttpUtility
+from logger_proxy import logger
 
 
 class AsyncData:
@@ -55,7 +56,7 @@ class AsyncData:
 		#print(data)
 		# async_url
 		d = HttpUtility.post(async_url, data)
-		print(d)
+		logger.info(d)
 		pass
 	
 	@classmethod

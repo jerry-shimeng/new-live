@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 # api doc https://developers.douban.com/wiki/?title=movie_v2#subject
 from db_access import DatabaseAccess
 from db_model import ProductInfo
+from logger_proxy import logger
 from proxy_parser import ProxyParser
 
 base_url = "https://api.douban.com"
@@ -27,10 +28,10 @@ class DoubanApi:
 		# print(len(list))
 		if list is not None and len(list) > 0:
 			for l in list:
-				print("douban source ", l.product_name)
+				logger.info("douban source ", l.product_name)
 				result = cls.start(l.product_name)
 				if result is None:
-					print("not found  ", l.product_name)
+					logger.warn("not found  ", l.product_name)
 					# DatabaseAccess.update_fail(l.id)
 					time.sleep(60)
 				else:
@@ -38,7 +39,7 @@ class DoubanApi:
 						cls.save_db(l, result)
 					except Exception as e:
 						traceback.print_exc()
-						print("save_db error", result["name"])
+						logger.error("save_db error", result["name"])
 						# 更新状态为3，获取源数据失败
 						DatabaseAccess.update_fail(l.id)
 						
@@ -56,7 +57,7 @@ class DoubanApi:
 			return res
 		except Exception as e:
 			traceback.print_exc()
-			print("get detail error", name)
+			logger.error("get detail error", name)
 			return None
 	
 	@classmethod
@@ -86,7 +87,7 @@ class DoubanApi:
 		content = cls.get(url)
 		obj = json.loads(content)
 		if "total" in obj.keys() and obj["total"] == 0:
-			print("not result for ", name)
+			logger.info("not result for ", name)
 			return
 		
 		for a in obj["subjects"]:
@@ -168,4 +169,4 @@ if __name__ == "__main__":
 	id = DoubanApi.search(product)
 	res = DoubanApi.detail(id)
 	DoubanApi.save_db(product, res)
-	print(res)
+	logger.info(res)

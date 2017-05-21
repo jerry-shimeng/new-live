@@ -3,6 +3,7 @@ import json
 import httplib2
 
 from commmon import DatetimeJSONEncoder
+from logger_proxy import logger
 
 
 class HttpUtility:
@@ -24,7 +25,7 @@ class HttpUtility:
             if not recall:
                 return self.get(recall=True, encoding="ISO-8859-1")
             else:
-                print(e)
+                logger.error(e)
                 return ""
         except TimeoutError:
             return ""
@@ -45,6 +46,6 @@ class HttpUtility:
         h = httplib2.Http()
 
         # body = bytes(body,encoding="utf-8")
-        print(body)
+        logger.info(body)
         (req_headers, content) = h.request(address, method="POST", body=body)
         return content.decode(encoding)

@@ -55,7 +55,7 @@ class WebSitParser:
 	# 获取电影简介
 	def parse_about(self, about):
 		name = about.h4.a["title"]
-		print(name)
+		logger.info(name)
 		url = about.h4.a["href"]
 		try:
 			self.parse_detail(url)
@@ -170,7 +170,7 @@ class WebSitParser:
 		try:
 			DatabaseAccess.save_as_lbl(d_map)
 		except Exception as e:
-			print("save ", e)
+			logger.error("save ", e)
 
 
 if __name__ == "__main__":

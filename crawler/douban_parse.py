@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from db_access import DatabaseAccess
 from http_utility import HttpUtility
+from logger_proxy import logger
 
 features = "lxml"
 
@@ -22,12 +23,11 @@ class DoubanContentParser:
     def run(cls):
         # 获取数据源非豆瓣的list（size=10）
         list = DatabaseAccess.get_product_by_source(douban_sorce)
-        print(len(list))
         if list is not None and len(list) > 0:
             for l in list:
                 result = cls(l.product_name).start()
                 if result is None:
-                    print("not found  ", l.product_name)
+                    logger.warn("not found  ", l.product_name)
                     DatabaseAccess.update_fail(l.id)
                     continue
                 try:
@@ -35,7 +35,7 @@ class DoubanContentParser:
                 except Exception as e:
                     # 更新状态为3，获取源数据失败
                     DatabaseAccess.update_fail(l.id)
-                    print(e)
+                    logger.error(e)
             time.sleep(10)
 
         list = None
@@ -52,6 +52,7 @@ class DoubanContentParser:
             return self.search_result()
         except Exception as e:
             traceback.print_exc()
+            logger.error(e)
             return None
 
     def search_result(self):

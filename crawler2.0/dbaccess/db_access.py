@@ -1,14 +1,7 @@
-import datetime
-
 from playhouse.shortcuts import model_to_dict
 
-from db_model import *
+from dbaccess.db_models import *
 from logger_proxy import logger
-
-movie_key = "movie"
-movie_key_id = 0
-base_source = "lbl"
-base_source_id = 0
 
 
 class DatabaseAccess:
