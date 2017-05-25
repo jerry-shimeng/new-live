@@ -14,4 +14,4 @@ run_env = cf.get("environment", "env")
 
 show_comment = cf.get("application", "show_comment")
 
-async_url = cf.get("application", "async_url")
+features = cf.get("application","features")
