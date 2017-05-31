@@ -10,7 +10,6 @@ database = {'host': cf.get("database", "host"),
             'password': cf.get("database", "password")}
 db_name = cf.get("database", "db_name")
 
-run_env = cf.get("environment", "env")
 
 show_comment = cf.get("application", "show_comment")
 

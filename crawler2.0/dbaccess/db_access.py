@@ -1,3 +1,5 @@
+import datetime
+
 from playhouse.shortcuts import model_to_dict
 
 from dbaccess.db_models import *
@@ -22,31 +24,26 @@ class DatabaseAccess:
 	
 	@classmethod
 	def get_product_detail(cls, detail_id, product_type):
-		if product_type == cls.get_product_type(movie_key):
+		if product_type == cls.get_product_type("movie"):
 			return ProductMovieDetail.get(ProductMovieDetail.id == detail_id)
 		else:
 			return None
 	
 	@classmethod
-	def get_product_type(cls, key=movie_key):
-		global movie_key_id
+	def get_product_type(cls, key="movie"):
+		
 		try:
-			if movie_key_id == 0:
-				movie_key_id = ProductType.get(ProductType.key == key).id
+			movie_key_id = ProductType.get(ProductType.key == key).id
 			return movie_key_id
 		except Exception as e:
 			logger.error("not found ProductType = ", key)
 			raise e
 	
 	@classmethod
-	def get_data_source(cls, source=base_source):
-		global base_source_id
-		
-		if base_source_id > 0:
-			return base_source_id
+	def get_data_source(cls, source='lbl'):
 		
 		try:
-			base_source_id = PublicDataSource.get(PublicDataSource.key == source).id
+			return PublicDataSource.get(PublicDataSource.key == source).id
 		except Exception as e:
 			logger.error("not found PublicDataSource = ", source)
 			raise e
@@ -104,11 +101,11 @@ class DatabaseAccess:
 			return 0
 	
 	@classmethod
-	def get_product_by_source(cls, source):
+	def get_product_by_source(cls, source: str, size: int = 10) -> []:
 		source_id = cls.get_data_source(source)
 		
 		list = ProductInfo.filter(ProductInfo.source != source_id, ProductInfo.status == 0).order_by(
-			ProductInfo.order_index.desc())[0:10]
+			ProductInfo.order_index.desc())[0:size]
 		return list
 	
 	# 保存豆瓣数据
@@ -147,7 +144,7 @@ class DatabaseAccess:
 		
 		cls.save_comment_info(product.id, result["comments"])
 		
-		logger.info(product.product_name, "form source", source)
+		logger.info(product.product_name + " form source " + source)
 	
 	# comments 评论信息保存
 	# result["comments"]
