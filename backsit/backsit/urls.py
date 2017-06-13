@@ -18,4 +18,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r"^", include("movie.urls")),
+    url(r"^api/", include("rest.urls")),
 ]

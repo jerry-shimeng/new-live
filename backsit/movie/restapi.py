@@ -65,5 +65,5 @@ class ProductInfoApi(generic.DetailView):
 			res["code"] = -1
 			res["message"] = e
 			print(e)
-			
+		
 		return HttpResponse(res["code"])

@@ -85,7 +85,9 @@ INSTALLED_APPS = [
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+	'rest_framework',
 	'movie',
+	'rest',
 ]
 
 MIDDLEWARE = [
@@ -126,22 +128,22 @@ DATABASES = {
 	#     'ENGINE': 'django.db.backends.sqlite3',
 	#     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 	# }
-	# 'default': {
-	#     'ENGINE': 'django.db.backends.mysql',
-	#     'NAME': 'mydb',
-	#     'USER': 'root',
-	#     'PASSWORD': '#~123465MSing!',
-	#     'HOST': '123.206.120.163',
-	#     'PORT': '3366',
-	# }
 	'default': {
 		'ENGINE': 'django.db.backends.mysql',
-		'NAME': '****',
-		'USER': '****',
-		'PASSWORD': '****',
-		'HOST': '****',
-		'PORT': '****',
+		'NAME': 'test_db2',
+		'USER': 'root',
+		'PASSWORD': 'root123',
+		'HOST': 'localhost',
+		'PORT': '3306',
 	}
+	# 'default': {
+	# 	'ENGINE': 'django.db.backends.mysql',
+	# 	'NAME': '****',
+	# 	'USER': '****',
+	# 	'PASSWORD': '****',
+	# 	'HOST': '****',
+	# 	'PORT': '****',
+	# }
 }
 
 # Password validation
@@ -161,6 +163,12 @@ AUTH_PASSWORD_VALIDATORS = [
 		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
 	},
 ]
+
+REST_FRAMEWORK = {
+	'DEFAULT_PERMISSION_CLASSES': (
+		'rest_framework.permissions.AllowAny',
+	),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/

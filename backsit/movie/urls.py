@@ -18,9 +18,11 @@ urlpatterns = [
     url(r"^help", views.IndexView().help, name="help"),
     url(r"^contact", views.IndexView().contact, name="contact"),
 
-    url(r'^api/down/(?P<id>[0-9]+)$', ProductDownloadUrlApi().get, name="down_url"),
-    url(r'^api/comment/(?P<id>[0-9]+)$', ProductCommentApi().get, name="product_comment"),
+    # url(r'^api/down/(?P<id>[0-9]+)$', ProductDownloadUrlApi().get, name="down_url"),
+    # url(r'^api/comment/(?P<id>[0-9]+)$', ProductCommentApi().get, name="product_comment"),
     # url(r'^api/product$', ProductInfoApi().submit_data, name="product_submit"),
     # url(r'^down/', MovieDownloadUrlView.as_view()),
+    
+
 ]
 # urlpatterns = format_suffix_patterns(urlpatterns)
