@@ -1,2 +1,0 @@
-sudo pip3  install flask-restful
-sudo pip3  install flask-restful-swagger

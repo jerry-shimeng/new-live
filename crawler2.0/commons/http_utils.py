@@ -2,7 +2,7 @@ import json
 
 import httplib2
 
-from commmon import DatetimeJSONEncoder
+from commons.utils import DatetimeJSONEncoder
 from logger_proxy import logger
 
 

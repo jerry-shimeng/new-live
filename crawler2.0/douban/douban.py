@@ -1,7 +1,6 @@
+from commons.enums import PublicSourceEnums
 from dbaccess.db_access import DatabaseAccess, ProductInfo
 from douban.douban_api import DoubanApi
-
-douban_sorce = "douban"
 
 
 class DoubanContentParser:
@@ -12,7 +11,7 @@ class DoubanContentParser:
 	
 	@classmethod
 	def run(cls, size: int = 10):
-		list = DatabaseAccess.get_product_by_source(douban_sorce, size)
+		list = DatabaseAccess.get_product_by_source(PublicSourceEnums.DOUBAN_SOURCE, size)
 		for l in list:
 			print('1:', l.product_name)
 			detail = DoubanApi.get_movie(l)
@@ -21,4 +20,4 @@ class DoubanContentParser:
 	
 	@classmethod
 	def save(cls, product: ProductInfo, model: object):
-		DatabaseAccess.save_as_douban(product, model, "douban")
+		DatabaseAccess.save_as_douban(product, model, PublicSourceEnums.DOUBAN_SOURCE)

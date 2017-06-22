@@ -1,6 +1,5 @@
 from django.conf.urls import url, include
 
-from movie.restapi import ProductDownloadUrlApi, ProductCommentApi, ProductInfoApi
 from . import views
 
 # router = routers.DefaultRouter()

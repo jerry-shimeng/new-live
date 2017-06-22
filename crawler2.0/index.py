@@ -7,6 +7,7 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from douban.douban import DoubanContentParser
+from lbl.lbl import LblContentParser
 
 
 def my_job():
@@ -17,4 +18,5 @@ if __name__ == "__main__":
 	# sched = BlockingScheduler()
 	# sched.add_job(my_job, 'interval', seconds=5)
 	# sched.start()
+	# LblContentParser.run()
 	DoubanContentParser.run(10)

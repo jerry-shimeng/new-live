@@ -6,12 +6,15 @@ from bs4 import BeautifulSoup
 
 # api doc https://developers.douban.com/wiki/?title=movie_v2#subject
 import config
+from commons import utils
 from dbaccess.db_models import ProductInfo
 from logger_proxy import logger
 
 base_url = "https://api.douban.com"
 search_url = base_url + "/v2/movie/search?q=%s"
 detail_url = base_url + "/v2/movie/subject/%d"
+
+
 # 评论接口不可用
 # comment_url = base_url + "/v2/movie/subject/%s/comments"
 
@@ -101,7 +104,7 @@ class DoubanApi:
 		about, comments = cls.get_other(model["alt"])
 		
 		result = {"id": model["id"], "name": name, "sub_name": sub_name, "rating": rating, "rating_sum": rating_sum,
-		          "image_url": image_url, "about": about,
+		          "image_url": image_url, "about": json.dumps(utils.convert_html_to_json(about)),
 		          "content": content, "comments": comments, "area": area, "images": None}
 		return result
 	

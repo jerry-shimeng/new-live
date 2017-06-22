@@ -18,3 +18,7 @@ class ProductCommentSerializer(serializers.Serializer):
 	content = serializers.CharField()
 	user_name = serializers.CharField()
 	comment_time = serializers.DateField()
+
+
+
+ 

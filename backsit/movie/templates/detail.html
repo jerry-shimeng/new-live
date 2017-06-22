@@ -212,22 +212,22 @@
     var getDownloadData = function (call) {
         var url = "/api/down/" + productId;
         $.get(url, {}, function (d) {
-            download = JSON.parse(d);
+            download = (d);
             call();
         });
     };
-
     var initDownloadUrl = function () {
 
         var list = [];
 
         for (var i = 0; i < download.length; i++) {
             var a = download[i].download_url;
+
             if (a.indexOf("pan.baidu.com") > 0) {
                 var num = a.indexOf("href");
                 a = a.substr(0, num) + " target='_blank' " + a.substring(num, a.length);
                 list.push(a);
-            } else if (a.indexOf("ed2k:") >= 0) {
+            } else if (a.indexOf("ed2k:") >= 0 || a.indexOf("magnet:?") >= 0 || a.indexOf("thunder:") >= 0) {
                 var s = "<a href='" + a + "'>迅雷下载</a>(如不能唤起迅雷，请点此<a href='#' onclick='copy_url()'>复制下载地址</a>，粘贴到迅雷中下载)";
 
                 var url = "<p id='hideurl' style='display:none'>" + a + "</p>"
@@ -236,10 +236,12 @@
             } else if (a.indexOf("http") >= 0) {
                 var s1 = "<a href='" + a + "'>种子下载</a>";
                 list.push(s1);
+            } else {
+                console.log(a)
             }
 
         }
-        console.log(JSON.stringify(list));
+        console.log((list));
         return list;
     };
 
@@ -247,10 +249,8 @@
     var getComments = function () {
         var url = "/api/comment/" + productId;
         $.get(url, {}, function (d) {
-            list = JSON.parse(d);
+            list = (d);
             list.forEach(function (v, k) {
-                console.log(JSON.stringify(v));
-
                 comments.push(v);
             })
         });

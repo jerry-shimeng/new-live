@@ -1,19 +1,17 @@
 from flask import Flask
-from flask_restful import Api
-from flask_restful_swagger import swagger
-from service import product_api
+from flask_restful import reqparse, abort, Api, Resource
+
+from web.rest import *
 
 app = Flask(__name__)
+api = Api(app)
 
-###################################
-# Wrap the Api with swagger.docs. It is a thin wrapper around the Api class that adds some swagger smarts
-api = swagger.docs(Api(app), apiVersion='1.0')
-# api = Api(app)
-###################################
 
-api.add_resource(product_api.ProductApi, "/product")
-
+api.add_resource(Product, '/v1/detail/<p_id>')
+api.add_resource(DownloadUrl, '/v1/down/<p_id>')
+api.add_resource(ProductComment, '/v1/comment/<p_id>')
+api.add_resource(ProductList, '/v1/list')
 
 
 if __name__ == '__main__':
-	app.run(debug=True)
+    app.run(debug=True)

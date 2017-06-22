@@ -2,6 +2,7 @@ import datetime
 
 from playhouse.shortcuts import model_to_dict
 
+from commons.enums import PublicSourceEnums, PublicTypesEnums
 from dbaccess.db_models import *
 from logger_proxy import logger
 
@@ -24,29 +25,10 @@ class DatabaseAccess:
 	
 	@classmethod
 	def get_product_detail(cls, detail_id, product_type):
-		if product_type == cls.get_product_type("movie"):
+		if product_type == PublicTypesEnums.MOVIE.value:
 			return ProductMovieDetail.get(ProductMovieDetail.id == detail_id)
 		else:
 			return None
-	
-	@classmethod
-	def get_product_type(cls, key="movie"):
-		
-		try:
-			movie_key_id = ProductType.get(ProductType.key == key).id
-			return movie_key_id
-		except Exception as e:
-			logger.error("not found ProductType = ", key)
-			raise e
-	
-	@classmethod
-	def get_data_source(cls, source='lbl'):
-		
-		try:
-			return PublicDataSource.get(PublicDataSource.key == source).id
-		except Exception as e:
-			logger.error("not found PublicDataSource = ", source)
-			raise e
 	
 	@classmethod
 	def save_as_lbl(cls, data_map):
@@ -57,12 +39,12 @@ class DatabaseAccess:
 		
 		# 产品
 		product.product_name = data_map["name"]
-		product.product_type = cls.get_product_type()
-		product.source = cls.get_data_source()
+		product.product_type = PublicTypesEnums.MOVIE.value
+		product.source = PublicSourceEnums.LBL_SOURCE.value
 		product.status = 0
 		product.order_index = cls.get_last_order_index() + 1
 		# 电影详情
-		product_movie.about = data_map["about"]
+		product_movie.about = ""
 		product_movie.area = ""
 		product_movie.product_name = data_map["name"]
 		product_movie.product_alias = data_map["name"]
@@ -101,10 +83,9 @@ class DatabaseAccess:
 			return 0
 	
 	@classmethod
-	def get_product_by_source(cls, source: str, size: int = 10) -> []:
-		source_id = cls.get_data_source(source)
+	def get_product_by_source(cls, source: PublicSourceEnums, size: int = 10) -> []:
 		
-		list = ProductInfo.filter(ProductInfo.source != source_id, ProductInfo.status == 0).order_by(
+		list = ProductInfo.filter(ProductInfo.source != source.value, ProductInfo.status == 0).order_by(
 			ProductInfo.order_index.desc())[0:size]
 		return list
 	
@@ -138,13 +119,13 @@ class DatabaseAccess:
 		pro_img.product = product.id
 		pro_img.save()
 		
-		product.source = cls.get_data_source(source)
+		product.source = source.value
 		product.status = 1
 		product.save()
 		
 		cls.save_comment_info(product.id, result["comments"])
 		
-		logger.info(product.product_name + " form source " + source)
+		logger.info(product.product_name + " form source " + str(source))
 	
 	# comments 评论信息保存
 	# result["comments"]
