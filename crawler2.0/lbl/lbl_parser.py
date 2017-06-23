@@ -24,7 +24,6 @@ class LblParser:
 		
 		for detail in list:
 			model = cls.detail(detail)
-			print(model)
 			cls.save(model)
 	
 	@classmethod
@@ -52,10 +51,10 @@ class LblParser:
 		# 名字
 		name = detail.h2.string
 		name = name[name.index("《") + 1:name.index("》")]
-		print(name)
 		# 验证电影名称是否存在，如存在不继续获取
-		# if DatabaseAccess.exist_name(name):
-		# 	return
+		if DatabaseAccess.exist_name(name):
+			return None
+		print(name)
 		
 		# 更新时间
 		time = detail.find(class_="postmeat").text
@@ -106,6 +105,9 @@ class LblParser:
 	
 	@classmethod
 	def save(cls, d):
+		if d is None:
+			return
+		
 		try:
 			DatabaseAccess.save_as_lbl(d)
 		except Exception as e:

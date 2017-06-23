@@ -32,8 +32,7 @@ class DatabaseAccess:
 	
 	@classmethod
 	def save_as_lbl(cls, data_map):
-		if cls.exist_name(data_map["name"]):
-			return
+		
 		product = ProductInfo()
 		product_movie = ProductMovieDetail()
 		
