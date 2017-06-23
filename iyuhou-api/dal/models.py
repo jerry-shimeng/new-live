@@ -1,7 +1,7 @@
 from peewee import *
-
-database = MySQLDatabase('test_db2',
-                         **{'host': 'localhost', 'port': 3306, 'user': 'root', 'password': 'root123'})
+from config import database, db_name
+database = MySQLDatabase(db_name,
+                         **database)
 
 
 class UnknownField(object):
