@@ -53,6 +53,7 @@ class DatabaseAccess:
 		product_movie.rating_sum = 0
 		product_movie.status = 1
 		product_movie.content = " "
+		product_movie.source_url = data_map['source']
 		
 		product_movie.save()
 		
@@ -208,12 +209,6 @@ class DatabaseAccess:
 	@classmethod
 	def get_public_dict_value(cls, key):
 		return PublicDictionary.get(PublicDictionary.key == key).value
-	
-	@classmethod
-	def save_submit_history(cls, product_id):
-		m = SubmitHistory()
-		m.product = product_id
-		m.save()
 	
 	@classmethod
 	def update_fail(cls, id):

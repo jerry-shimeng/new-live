@@ -1,8 +1,8 @@
 
-sudo pip3 install lxml
-sudo pip3 install bs4
-sudo pip3 install peewee
-sudo pip3 install httplib2
-sudo pip3 install PyMySQL
-sudo pip3 install simlejson
-sudo pip3 install apscheduler
+pip3 install lxml
+pip3 install bs4
+pip3 install peewee
+pip3 install httplib2
+pip3 install PyMySQL
+pip3 install simlejson
+pip3 install schedule

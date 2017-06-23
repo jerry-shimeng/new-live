@@ -67,8 +67,7 @@ class LblParser:
 		# 下载地址
 		down_links = cls.get_download_url(div)
 		
-		return {'name': name, 'time': time, 'tag': status, 'down_links': down_links}
-	 
+		return {'name': name, 'time': time, 'tag': status, 'down_links': down_links, 'source': url}
 	
 	@classmethod
 	def get_download_url(cls, div):

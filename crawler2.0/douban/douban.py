@@ -20,4 +20,7 @@ class DoubanContentParser:
 	
 	@classmethod
 	def save(cls, product: ProductInfo, model: object):
-		DatabaseAccess.save_as_douban(product, model, PublicSourceEnums.DOUBAN_SOURCE)
+		try:
+			DatabaseAccess.save_as_douban(product, model, PublicSourceEnums.DOUBAN_SOURCE)
+		except Exception as e:
+			print(e)
