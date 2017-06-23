@@ -23,7 +23,7 @@ def test_jon():
 
 #
 schedule.every(10).minutes.do(lbl_job)
-schedule.every(10).minutes.do(douban_job)
+schedule.every(5).minutes.do(douban_job)
 # schedule.every(10).seconds.do(test_jon)
 
 # schedule.every().hour.do(job)
@@ -33,7 +33,6 @@ schedule.every(10).minutes.do(douban_job)
 
 
 if __name__ == "__main__":
-	lbl_job()
-	# while True:
-	# 	schedule.run_pending()
-	# 	time.sleep(60)
+	while True:
+		schedule.run_pending()
+		time.sleep(60)

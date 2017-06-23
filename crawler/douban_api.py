@@ -32,7 +32,7 @@ class DoubanApi:
 				result = cls.start(l.product_name)
 				if result is None:
 					logger.warn("not found  ", l.product_name)
-					# DatabaseAccess.update_fail(l.id)
+					DatabaseAccess.update_fail(l.id)
 					time.sleep(60)
 				else:
 					try:
