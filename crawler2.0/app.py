@@ -23,7 +23,7 @@ def test_jon():
 
 #
 schedule.every(10).minutes.do(lbl_job)
-schedule.every(5).minutes.do(douban_job)
+schedule.every(10).minutes.do(douban_job)
 # schedule.every(10).seconds.do(test_jon)
 
 # schedule.every().hour.do(job)

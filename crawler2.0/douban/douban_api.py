@@ -76,6 +76,7 @@ class DoubanApi:
             return 0
 
         if 'subjects' not in obj:
+            print(obj)
             return 0
 
         for a in obj["subjects"]:
