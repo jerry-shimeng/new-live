@@ -2,9 +2,12 @@ import datetime
 
 from playhouse.shortcuts import model_to_dict
 
+import logger_proxy
 from commons.enums import PublicSourceEnums, PublicTypesEnums
 from dbaccess.db_models import *
 from logger_proxy import logger
+
+logger = logger_proxy.get_logger()
 
 
 class DatabaseAccess:
@@ -152,63 +155,6 @@ class DatabaseAccess:
 			product_comment_detail.comment_info = product_comment.get_id()
 			product_comment_detail.save()
 	
-	# 获取未更新的数据提交到生产环境
-	@classmethod
-	def get_the_new_data(cls, size=10):
-		history = None
-		try:
-			history = SubmitHistory.select().order_by(SubmitHistory.submit_time.desc())[0]
-		except:
-			history = None
-		
-		query = None
-		
-		if history is None:
-			query = ProductInfo.select().filter(ProductInfo.status == 1)
-		else:
-			query = ProductInfo.select().filter(ProductInfo.status == 1, ProductInfo.update_time > history.submit_time)
-		
-		r = query.order_by(ProductInfo.update_time)[0:size]
-		
-		if r is None or len(r) == 0:
-			return []
-		
-		list = []
-		
-		for d in r:
-			d = model_to_dict(d)
-			list.append(d)
-		
-		return list
-	
-	# 获取图片信息
-	@classmethod
-	def get_product_images(cls, product_id):
-		r = ProductImagesDetail.select().filter(ProductImagesDetail.product == product_id)
-		list = []
-		for d in r:
-			temp = PublicImages.select(PublicImages.image, PublicImages.img_type).filter(
-				PublicImages.id == d.image).first()
-			list.append(model_to_dict(temp))
-		return list
-	
-	# 获取下载地址
-	@classmethod
-	def get_product_download(cls, product_id):
-		r = ProductDownloadDetail.select().filter(ProductDownloadDetail.product == product_id)
-		
-		list = []
-		for d in r:
-			temp = PublicDownloadAddress.select(PublicDownloadAddress.download_type,
-			                                    PublicDownloadAddress.download_url).filter(
-				PublicDownloadAddress.id == d.address).first()
-			list.append(model_to_dict(temp))
-		return list
-	
-	@classmethod
-	def get_public_dict_value(cls, key):
-		return PublicDictionary.get(PublicDictionary.key == key).value
-	
 	@classmethod
 	def update_fail(cls, id):
 		try:
@@ -217,3 +163,34 @@ class DatabaseAccess:
 			pro.save()
 		except Exception as e:
 			logger.error("update status for %d error" % id, e)
+
+
+class PublicDataAccess:
+	@classmethod
+	def get_categorys_by_name(cls, name, parent=1):
+		try:
+			ll = ProductType.get(ProductType.key == name, ProductType.parent == parent)
+			return model_to_dict(ll)
+		except Exception as e:
+			# logger.error('get_categorys_by_name', e)
+			return None
+	
+	@classmethod
+	def save_product_type_detail(cls, pid, cid):
+		detail = ProductSubTypeDetail()
+		detail.product = pid
+		detail.sub_type = cid
+		
+		detail.save()
+	
+	@classmethod
+	def save_categorys(cls, key, pid):
+		ptype = ProductType()
+		ptype.parent = pid
+		ptype.key = key
+		ptype.name = key
+		ptype.describe = key
+		ptype.status = 1
+		
+		ptype.save()
+		return model_to_dict(ptype)
