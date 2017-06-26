@@ -41,8 +41,8 @@ def convert_html_to_json(html):
 		result['director'] = get_soup_value(soup, '导演')
 		result['screenwriter'] = get_soup_value(soup, '编剧')
 		result['actor'] = get_soup_value(soup, '主演')
-		result['release'] = get_soup_value(soup, '上映日期:')
-		result['time'] = get_soup_value(soup, '片长:')
+		result['time'] = get_soup_value(soup, '上映日期:')
+		result['duration'] = get_soup_value(soup, '片长:')
 		
 		print(result)
 	except:
