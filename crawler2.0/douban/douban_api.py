@@ -93,7 +93,7 @@ class DoubanApi:
 		url = detail_url % id
 		content = cls.get(url)
 		model = json.loads(content)
-		
+
 		name = model["title"]
 		sub_name = model["original_title"]
 		rating = json.dumps(model["rating"])

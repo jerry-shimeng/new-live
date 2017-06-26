@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `product_info` (
   `order_index` int(11) DEFAULT NULL,
   `product_type_id` int(11) NOT NULL,
   `source_id` int(11) NOT NULL,
+  	`hot` tinyint default '0' null,
   PRIMARY KEY (`id`),
   KEY `product_info_product_type_id_c76e5879_fk_product_type_id` (`product_type_id`),
   KEY `product_info_source_id_63f852a9_fk_public_data_source_id` (`source_id`),
@@ -60,15 +61,20 @@ CREATE TABLE IF NOT EXISTS `product_movie_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(200) NOT NULL,
   `product_alias` varchar(200) NOT NULL,
-  `rating` double NOT NULL,
+  `rating` VARCHAR(200) NOT NULL,
+  `score` double default '0' null,
   `rating_sum` int(11) NOT NULL,
   `release_time` date,
   `about` longtext,
   `content` longtext,
   `area` varchar(100) DEFAULT NULL,
   `status` smallint(6) NOT NULL,
+  `douban_id` int null,
+  `source_url` varchar(500) null,
+  `update_time` timestamp ON UPDATE CURRENT_TIMESTAMP not null,
+	`create_time` timestamp default CURRENT_TIMESTAMP not null,
   PRIMARY KEY (`id`),
-  KEY `rating` (`rating`)
+  KEY `score` (`score`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `product_sub_type_detail` (
