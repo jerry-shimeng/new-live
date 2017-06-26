@@ -1,3 +1,5 @@
+from flask import json
+
 from common import utils, result
 from dal.db import PublicDownloadDAL, ProductCommentDAL
 
@@ -6,7 +8,7 @@ class Downloads:
 	@classmethod
 	def get(cls, id):
 		details = PublicDownloadDAL.get_address(id)
-		res = list(map(lambda x: x['download_url'], details))
+		res = list(map(lambda x: json.loads(x['download_url']), details))
 		return result.of(res)
 
 

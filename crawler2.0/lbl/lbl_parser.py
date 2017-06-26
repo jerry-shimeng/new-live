@@ -1,3 +1,4 @@
+import json
 import re
 
 from bs4 import BeautifulSoup
@@ -26,7 +27,8 @@ class LblParser:
 			try:
 				model = cls.detail(detail)
 				cls.save(model)
-			except:
+			except Exception as e:
+				print(e)
 				pass
 	
 	@classmethod
@@ -89,22 +91,67 @@ class LblParser:
 				if not re.match(reg, a["href"]) is None:
 					continue
 				
+				if a["href"].find('http://kuai.xunlei.com') >= 0:
+					continue
+				
 				href = cls.process_download_url(a["href"])
 				
 				if len(href.strip()) < 10:
 					continue
 				if href.find("pan.baidu.com") > 0:
-					href = p
+					href = str(p)
 				list.append(href)
-				pass
 		
-		return list
+		# 字符串列表转换
+		
+		return cls.download_url_convert(list)
 	
 	@classmethod
 	def process_download_url(cls, url):
 		url = url.replace("http://www.lbldy.com", "").replace("[www.lbldy.com]", "").replace(
 			"&tr=http://www.youjiady.com", "")
+		
 		return url
+	
+	@classmethod
+	def download_url_convert(cls, urls):
+		if urls is None or len(urls) == 0:
+			return []
+		new_urls = []
+		for u in urls:
+			u = u.strip()
+			if u.find('magnet') == 0:
+				new_urls.append(json.dumps({'magnet': u}))
+				continue
+			if u.find('thunder') == 0:
+				new_urls.append(json.dumps({'thunder': u}))
+				continue
+			if u.find('http') == 0:
+				new_urls.append(json.dumps({'http': u}))
+				continue
+			if u.find('<p>') == 0:
+				d = cls.process_baidu_yun(u)
+				if d is not None:
+					new_urls.append(json.dumps({'baidu': d}))
+				continue
+				
+		return new_urls
+	
+	@classmethod
+	def process_baidu_yun(cls, s):
+		try:
+			
+			s = '<html>' + s + '</html>'
+			
+			bf = BeautifulSoup(s, 'lxml')
+			# link = bf.strings
+			r = list(map(lambda x: str(x), bf.strings))
+			link = r[1]
+			password = r[2].strip().replace('密码：', '')
+			return {'link': link, 'password': password}
+		except:
+			print('process_baidu_yun error')
+			return None
 	
 	@classmethod
 	def save(cls, d):
