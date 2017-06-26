@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `public_data_source` (
 
 CREATE TABLE IF NOT EXISTS `public_download_address` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `download_url` varchar(1000) NOT NULL,
+  `download_url` text NOT NULL,
   `download_type` smallint(6) NOT NULL,
   `status` smallint(6) NOT NULL,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
