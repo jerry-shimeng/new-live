@@ -23,8 +23,11 @@ class LblParser:
 		list = cls.get_list(url)
 		
 		for detail in list:
-			model = cls.detail(detail)
-			cls.save(model)
+			try:
+				model = cls.detail(detail)
+				cls.save(model)
+			except:
+				pass
 	
 	@classmethod
 	def get_list(cls, url):
