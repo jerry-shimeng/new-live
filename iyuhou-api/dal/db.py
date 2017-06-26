@@ -52,7 +52,7 @@ class ProductInfoDal:
 		total = count._result.rows[0][0]
 		count.close()
 		
-		sql = sql + "ORDER BY b.%s DESC" % ('id' if args['order'] is None else args['order'])
+		sql = sql + "ORDER BY b.%s DESC" % args['order']
 		
 		# 分页
 		index, size = args['page'], args['size']
@@ -63,6 +63,14 @@ class ProductInfoDal:
 		ll = ProductInfo.raw(sql)
 		ll = map(lambda x: x.id, ll)
 		return list(ll), total
+	
+	@classmethod
+	def get_hot(cls):
+		try:
+			ll = ProductInfo.filter(ProductInfo.hot == 1).order_by(ProductInfo.order_index.desc())
+			return list(map(lambda x: x.id, ll))
+		except:
+			return []
 
 
 class ProductMovieDAL:

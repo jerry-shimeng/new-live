@@ -102,6 +102,7 @@ class DatabaseAccess:
 		detail.content = result["content"]
 		detail.rating = result["rating"]
 		detail.rating_sum = result["rating_sum"]
+		detail.score = result["score"]
 		detail.status = 1
 		detail.douban_id = result["id"]
 		

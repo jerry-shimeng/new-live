@@ -68,6 +68,7 @@ class ProductMovieDetail(BaseModel):
 	product_name = CharField()
 	rating = CharField(index=True)
 	rating_sum = IntegerField()
+	score = FloatField()
 	release_time = DateField(null=True)
 	status = IntegerField()
 	douban_id = IntegerField()

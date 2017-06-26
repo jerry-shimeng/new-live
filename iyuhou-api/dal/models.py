@@ -54,6 +54,7 @@ class ProductInfo(BaseModel):
 	product_type = IntegerField(db_column='product_type_id', index=True)
 	source = IntegerField(db_column='source_id', index=True)
 	status = IntegerField()
+	hot = IntegerField()
 	update_time = DateTimeField()
 	
 	class Meta:
@@ -69,6 +70,7 @@ class ProductMovieDetail(BaseModel):
 	product_name = CharField()
 	rating = CharField(index=True, null=True)
 	rating_sum = IntegerField()
+	score = FloatField()
 	release_time = DateField(null=True)
 	status = IntegerField()
 	

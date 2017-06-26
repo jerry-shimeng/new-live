@@ -46,6 +46,12 @@ class ProductList(Resource):
 			return result.fail(-1, str(e))
 
 
+class HotList(Resource):
+	
+	def get(self):
+		return Products.hot()
+
+
 class DownloadUrl(Resource):
 	def get(self, p_id) -> object:
 		return Downloads.get(p_id), 200
