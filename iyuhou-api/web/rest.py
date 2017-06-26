@@ -39,8 +39,11 @@ class ProductList(Resource):
 	parser.add_argument('online', type=bool, help='online?')
 	
 	def get(self) -> object:
-		args = self.parser.parse_args()
-		return Products.query(args)
+		try:
+			args = self.parser.parse_args()
+			return Products.query(args)
+		except Exception as e:
+			return result.fail(-1, str(e))
 
 
 class DownloadUrl(Resource):
