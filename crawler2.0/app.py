@@ -33,8 +33,7 @@ schedule.every(10).minutes.do(douban_job)
 
 
 if __name__ == "__main__":
-	lbl_job()
-	douban_job()
-	# while True:
-	# 	schedule.run_pending()
-	# 	time.sleep(60)
+
+	while True:
+		schedule.run_pending()
+		time.sleep(60)

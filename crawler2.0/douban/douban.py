@@ -1,4 +1,4 @@
-from flask import json
+import json
 
 import logger_proxy
 from commons.enums import PublicSourceEnums
