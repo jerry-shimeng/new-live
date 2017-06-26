@@ -70,7 +70,7 @@ class DoubanApi:
 		content = cls.get(url)
 		obj = json.loads(content)
 		if "total" in obj.keys() and obj["total"] == 0:
-			logger.info("not result for ", name)
+			logger.info("not result for " + name)
 			return 0
 		
 		if 'subjects' not in obj:

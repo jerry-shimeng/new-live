@@ -25,6 +25,8 @@ class DoubanContentParser:
 				detail = DoubanApi.get_movie(l)
 				if detail is not None:
 					cls.save(l, detail)
+				else:
+					DatabaseAccess.update_fail(l.id)
 			except Exception as e:
 				traceback.print_exc()
 				logger.error('douban',e)
