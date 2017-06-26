@@ -8,8 +8,8 @@ class Downloads:
 	@classmethod
 	def get(cls, id):
 		details = PublicDownloadDAL.get_address(id)
-		res = list(map(lambda x: json.loads(x['download_url']), details))
-		return result.of(res)
+		
+		return result.of(json.loads(details['download_url']))
 
 
 class Comments:

@@ -92,14 +92,11 @@ class ProductMovieDAL:
 class PublicDownloadDAL:
 	@classmethod
 	def get_address(cls, id):
-		ls = ProductDownloadDetail.filter(ProductDownloadDetail.product == id)
+		l = ProductDownloadDetail.get(ProductDownloadDetail.product == id)
 		
-		res = []
+		x = PublicDownloadAddress.get(PublicDownloadAddress.id == l.address)
 		
-		for l in ls:
-			d = PublicDownloadAddress.get(PublicDownloadAddress.id == l.address)
-			res.append(d)
-		return list(map(lambda x: model_to_dict(x), res))
+		return model_to_dict(x)
 
 
 class ProductCommentDAL:

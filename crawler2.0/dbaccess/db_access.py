@@ -65,18 +65,15 @@ class DatabaseAccess:
 		product.save()
 		
 		# 保存下载地址
-		d_links = data_map["down_links"]
-		if not d_links is None:
-			for link in d_links:
-				d = PublicDownloadAddress()
-				d.download_url = link
-				d.status = 1
-				d.download_type = 1
-				d.save()
-				detail = ProductDownloadDetail()
-				detail.address = d.get_id()
-				detail.product = product.get_id()
-				detail.save()
+		d = PublicDownloadAddress()
+		d.download_url = data_map["down_links"]
+		d.status = 1
+		d.download_type = 1
+		d.save()
+		detail = ProductDownloadDetail()
+		detail.address = d.get_id()
+		detail.product = product.get_id()
+		detail.save()
 	
 	@classmethod
 	def get_last_order_index(cls):
