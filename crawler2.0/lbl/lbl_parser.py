@@ -22,7 +22,8 @@ class LblParser:
     @classmethod
     def process(cls, url):
         list = cls.get_list(url)
-
+        if list is None:
+            return
         for detail in list:
             try:
                 model = cls.detail(detail)
@@ -37,7 +38,7 @@ class LblParser:
         soup = BeautifulSoup(html, config.features)
         list = soup.find(id="center")
         if list is None:
-            return None
+            return []
         list = list.find_all(class_="postlist")
         return list
 

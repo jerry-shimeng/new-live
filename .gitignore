@@ -92,3 +92,4 @@ ENV/
 
 *.zip
 crawler/log/*
+crawler2.0/log/*
