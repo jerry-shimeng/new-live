@@ -67,7 +67,8 @@ class ProductInfoDal:
 	@classmethod
 	def get_hot(cls):
 		try:
-			ll = ProductInfo.filter(ProductInfo.hot == 1).order_by(ProductInfo.order_index.desc())
+			ll = ProductInfo.filter(ProductInfo.hot == 1, ProductInfo.status == 1).order_by(
+				ProductInfo.order_index.desc())
 			return list(map(lambda x: x.id, ll))
 		except:
 			return []

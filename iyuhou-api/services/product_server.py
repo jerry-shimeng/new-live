@@ -161,11 +161,11 @@ class Products:
 			
 			if isinstance(ab, str):
 				# 处理处理。。。
-				return utils.convert_html_to_json(ab)
+				return {}
 			elif isinstance(ab, dict):
 				return ab
 			else:
 				return {}
 		except Exception as e:
 			print(e)
-			return utils.convert_html_to_json(about)
+			return {}
