@@ -49,4 +49,4 @@ if __name__ == "__main__":
 		t.start()
 	
 	while True:
-		time.sleep(50)
+		time.sleep(4*3600)

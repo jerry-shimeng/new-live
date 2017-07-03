@@ -28,7 +28,7 @@ class DoubanApi:
 		# print(len(list))
 		if list is not None and len(list) > 0:
 			for l in list:
-				logger.info("douban source ", l.product_name)
+				logger.info("douban source %s ", l.product_name)
 				result = cls.start(l.product_name)
 				if result is None:
 					logger.warn("not found  ", l.product_name)

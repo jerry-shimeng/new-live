@@ -154,7 +154,7 @@ class DatabaseAccess:
 		
 		cls.save_comment_info(product.id, result["comments"])
 		
-		logger.info(product.product_name, "form source", source)
+		logger.info(product.product_name + "form source " + source)
 	
 	# comments 评论信息保存
 	# result["comments"]
