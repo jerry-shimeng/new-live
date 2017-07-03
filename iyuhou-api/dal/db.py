@@ -1,7 +1,7 @@
 from playhouse.shortcuts import model_to_dict
 
 from dal import models
-from dal.models import ProductInfo, ProductMovieDetail, ProductImagesDetail, PublicImages, ProductDownloadDetail, \
+from dal.models import ProductInfo, ProductMovieDetail, ProductImagesDetail, PublicImages, \
 	PublicDownloadAddress, ProductCommentDetail, ProductCommentInfo
 
 
@@ -43,11 +43,13 @@ class ProductInfoDal:
 							WHERE a.status =1 AND a.product_type_id = %s	''' % args['type']
 		
 		if not args['k'] is None and len(args['k']) > 0:
-			sql = sql + 'AND a.product_name LIKE "%%%s%%" ' % args['k']
-		
-		# 总量
-		count = "SELECT  count(a.id) as count " + sql
-		count = models.database.execute_sql(count)
+			sql = sql + 'AND a.product_name LIKE %s '
+			count = "SELECT  count(a.id) as count " + sql
+			count = models.database.execute_sql(count, "%" + args['k'] + "%")
+		else:
+			# 总量
+			count = "SELECT  count(a.id) as count " + sql
+			count = models.database.execute_sql(count)
 		
 		total = count._result.rows[0][0]
 		count.close()
@@ -60,7 +62,11 @@ class ProductInfoDal:
 		sql += " LIMIT %s, %s;" % ((index - 1) * size, size)
 		
 		sql = "SELECT  a.* " + sql
-		ll = ProductInfo.raw(sql)
+		
+		if not args['k'] is None and len(args['k']) > 0:
+			ll = ProductInfo.raw(sql, "%" + args['k'] + "%")
+		else:
+			ll = ProductInfo.raw(sql)
 		ll = map(lambda x: x.id, ll)
 		return list(ll), total
 	
@@ -93,11 +99,10 @@ class ProductMovieDAL:
 class PublicDownloadDAL:
 	@classmethod
 	def get_address(cls, id):
-		l = ProductDownloadDetail.get(ProductDownloadDetail.product == id)
+		x = PublicDownloadAddress.filter(PublicDownloadAddress.product == id)
 		
-		x = PublicDownloadAddress.get(PublicDownloadAddress.id == l.address)
-		
-		return model_to_dict(x)
+		for a in x:
+			yield model_to_dict(a)
 
 
 class ProductCommentDAL:

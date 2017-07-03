@@ -1,4 +1,5 @@
 import argparse
+import traceback
 
 from flask_restful import Resource, reqparse
 
@@ -43,11 +44,11 @@ class ProductList(Resource):
 			args = self.parser.parse_args()
 			return Products.query(args)
 		except Exception as e:
+			traceback.print_exc()
 			return result.fail(-1, str(e))
 
 
 class HotList(Resource):
-	
 	def get(self):
 		return Products.hot()
 

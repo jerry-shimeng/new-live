@@ -15,3 +15,7 @@ class ProductDAL:
 			return ProductInfo.get(ProductInfo.product_name.contains(name))
 		except:
 			return None
+	
+	@classmethod
+	def save_online(cls):
+		pass

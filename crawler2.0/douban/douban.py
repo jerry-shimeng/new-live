@@ -18,7 +18,7 @@ class DoubanContentParser:
 	
 	@classmethod
 	def run(cls, size: int = 10):
-		list = DatabaseAccess.get_product_by_source(PublicSourceEnums.DOUBAN_SOURCE, size)
+		list = DatabaseAccess.get_product_by_source(PublicSourceEnums.DOUBAN, size)
 		for l in list:
 			logger.info(l.product_name)
 			try:
@@ -35,7 +35,7 @@ class DoubanContentParser:
 	@classmethod
 	def save(cls, product: ProductInfo, model: object):
 		try:
-			DatabaseAccess.save_as_douban(product, model, PublicSourceEnums.DOUBAN_SOURCE)
+			DatabaseAccess.save_as_douban(product, model, PublicSourceEnums.DOUBAN)
 			
 			# 保存分类信息
 			cls.save_categorys(product.id, model["about"])

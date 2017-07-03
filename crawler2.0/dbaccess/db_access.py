@@ -34,6 +34,13 @@ class DatabaseAccess:
 			return None
 	
 	@classmethod
+	def get_product_detail_by_name(cls, name, product_type):
+		if product_type == PublicTypesEnums.MOVIE.value:
+			return ProductMovieDetail.get(ProductMovieDetail.product_name == name)
+		else:
+			return None
+	
+	@classmethod
 	def save_as_lbl(cls, data_map):
 		
 		product = ProductInfo()
@@ -42,7 +49,7 @@ class DatabaseAccess:
 		# 产品
 		product.product_name = data_map["name"]
 		product.product_type = PublicTypesEnums.MOVIE.value
-		product.source = PublicSourceEnums.LBL_SOURCE.value
+		product.source = PublicSourceEnums.LBL.value
 		product.status = 0
 		product.order_index = cls.get_last_order_index() + 1
 		# 电影详情
@@ -69,11 +76,8 @@ class DatabaseAccess:
 		d.download_url = data_map["down_links"]
 		d.status = 1
 		d.download_type = 1
+		d.product = product.id
 		d.save()
-		detail = ProductDownloadDetail()
-		detail.address = d.get_id()
-		detail.product = product.get_id()
-		detail.save()
 	
 	@classmethod
 	def get_last_order_index(cls):

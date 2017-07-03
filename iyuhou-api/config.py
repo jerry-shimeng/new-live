@@ -7,10 +7,11 @@ cf.read("config.ini")
 database = {'host': cf.get("database", "host"),
             'port': cf.getint("database", "port"),
             'user': cf.get("database", "user"),
-            'password': cf.get("database", "password")}
+            'password': cf.get("database", "password"),
+            'threadlocals': True
+            }
 db_name = cf.get("database", "db_name")
-
 
 show_comment = cf.get("application", "show_comment")
 
-features = cf.get("application","features")
+features = cf.get("application", "features")

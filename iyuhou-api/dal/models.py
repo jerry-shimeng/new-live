@@ -1,7 +1,22 @@
 from peewee import *
 from config import database, db_name
-database = MySQLDatabase(db_name,
-                         **database)
+from playhouse.shortcuts import RetryOperationalError
+
+import logging
+
+logger = logging.getLogger('peewee')
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
+
+class MyRetryDB(RetryOperationalError, MySQLDatabase):
+	"""
+	自动重连
+	"""
+	pass
+
+
+database = MyRetryDB(db_name, **database)
 
 
 class UnknownField(object):
@@ -30,12 +45,12 @@ class ProductCommentInfo(BaseModel):
 		db_table = 'product_comment_info'
 
 
-class ProductDownloadDetail(BaseModel):
-	address = IntegerField(db_column='address_id', index=True)
-	product = IntegerField(db_column='product_id', index=True)
-	
-	class Meta:
-		db_table = 'product_download_detail'
+# class ProductDownloadDetail(BaseModel):
+# 	address = IntegerField(db_column='address_id', index=True)
+# 	product = IntegerField(db_column='product_id', index=True)
+#
+# 	class Meta:
+# 		db_table = 'product_download_detail'
 
 
 class ProductImagesDetail(BaseModel):
@@ -123,6 +138,7 @@ class PublicDownloadAddress(BaseModel):
 	download_type = IntegerField()
 	download_url = CharField()
 	status = IntegerField()
+	product = IntegerField(db_column='product_id')
 	
 	class Meta:
 		db_table = 'public_download_address'

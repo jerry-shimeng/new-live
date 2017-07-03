@@ -30,14 +30,6 @@ class ProductCommentInfo(BaseModel):
 		db_table = 'product_comment_info'
 
 
-class ProductDownloadDetail(BaseModel):
-	address = IntegerField(db_column='address_id', index=True)
-	product = IntegerField(db_column='product_id', index=True)
-	
-	class Meta:
-		db_table = 'product_download_detail'
-
-
 class ProductImagesDetail(BaseModel):
 	image = IntegerField(db_column='image_id', index=True)
 	product = IntegerField(db_column='product_id', index=True)
@@ -123,6 +115,7 @@ class PublicDownloadAddress(BaseModel):
 	download_type = IntegerField()
 	download_url = CharField()
 	status = IntegerField()
+	product = IntegerField(db_column='product_id')
 	
 	class Meta:
 		db_table = 'public_download_address'
