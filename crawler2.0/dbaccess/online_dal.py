@@ -52,7 +52,10 @@ class OnlineDAL:
 			detail.score = d['score']
 			detail.rating_sum = d['rating_sum']
 			if len(d['about']['time'].strip()) > 0:
-				detail.release_time = datetime.datetime.strptime(d['about']['time'].strip(), "%Y-%m-%d").date()
+				try:
+					detail.release_time = datetime.datetime.strptime(d['about']['time'].strip(), "%Y-%m-%d").date()
+				except:
+					pass
 			detail.about = json.dumps(d['about'])
 			detail.content = d['content']
 			detail.area = d['area']

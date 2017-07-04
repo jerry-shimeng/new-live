@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from commons.enums import PublicSourceEnums
 from commons.http_utils import HttpUtils
@@ -6,13 +7,16 @@ from dbaccess.online_dal import OnlineDAL
 from dbaccess.product_dal import ProductDAL
 from douban.douban import DoubanContentParser
 
-languages = {'70001': '中文', '70003': '英语', '70000': '俄罗斯'}
+languages = {'70001': '中文', '70003': '英语', '70000': '俄罗斯','70004':'日语'}
 
 
 class LeTvMovie:
 	@classmethod
-	def run(cls):
-		cls.get_data(cls.get_url())
+	def run(cls,page=1):
+
+		while page>0:
+			cls.get_data(cls.get_url(page))
+			page = page -1
 	
 	@classmethod
 	def get_url(cls, page=1, size=60):
@@ -25,6 +29,7 @@ class LeTvMovie:
 	
 	@classmethod
 	def get_data(cls, url):
+		print(url)
 		res = HttpUtils.get(url, headers=HttpUtils.get_header())
 		
 		result = json.loads(res)
@@ -38,15 +43,21 @@ class LeTvMovie:
 		
 		for r in ds:
 			detail = cls.detail(r)
-			if cls.valid(detail):
-				product, detail = OnlineDAL.save(detail, PublicSourceEnums.LETV)
-				# 保存成功
-				DoubanContentParser.save_categorys(product.id, detail.about)
-	
+			if detail is not None and cls.valid(detail):
+				try:
+					product, detail = OnlineDAL.save(detail, PublicSourceEnums.LETV)
+					# 保存成功
+					DoubanContentParser.save_categorys(product.id, detail.about)
+				except:
+					traceback.print_exc()
 	@classmethod
 	def detail(cls, d):
+
+		if len( d['videoList']) == 0:
+			return None
+
 		about = cls.get_about(d)
-		
+
 		video = d['videoList'][0]
 		
 		m = {'name': d['name'], 'time': d['releaseDate'], 'online_url': video['url'], 'source': ""}
@@ -83,7 +94,12 @@ class LeTvMovie:
 		
 		def sub(s):
 			return s.split(",")
-		
+
+		if len( d['videoList'])>0:
+			time =  d['videoList'][0]['releaseDate']
+		else:
+			time = '0'
+
 		return {
 			"categorys": sub(d['subCategoryName']),
 			"area": d['areaName'],
@@ -91,13 +107,13 @@ class LeTvMovie:
 			"director": list(d['directory'].values()),
 			"screenwriter": d['screenwriter'],
 			"actor": value(d['starring']),
-			"time": d['videoList'][0]['releaseDate'],
+			"time":time,
 			"duration": d['duration']
 		}
 	
 	@classmethod
 	def valid(cls, d):
-		
+		print(d['name'])
 		if d['sub_name'].find("购买本片") > 0:
 			return False
 		if d['sub_name'].find("预告片") > 0 or d['name'].find("预告片") > 0:
