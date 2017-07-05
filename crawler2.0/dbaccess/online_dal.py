@@ -5,7 +5,7 @@ import traceback
 
 from commons.enums import PublicTypesEnums, PublicSourceEnums
 from dbaccess.db_access import DatabaseAccess
-from dbaccess.db_models import ProductInfo, ProductMovieDetail, PublicDownloadAddress
+from dbaccess.db_models import ProductInfo, ProductMovieDetail, PublicDownloadAddress, PublicImages
 from dbaccess.product_dal import ProductDAL
 
 
@@ -29,7 +29,9 @@ class OnlineDAL:
 		product.save()
 		
 		cls.save_address(product.id, d['online_url'], t)
-		
+
+		cls.save_imgs(product.id,d)
+
 		return product, detail
 	
 	# 保存地址
@@ -94,3 +96,12 @@ class OnlineDAL:
 				traceback.print_exc()
 				print(address)
 				print(dt.download_url)
+
+	@classmethod
+	def save_imgs(cls,pid,d):
+		img = PublicImages()
+		img.image = d["image_url"]
+		img.img_type = 1
+		img.status = 1
+		img.product = pid
+		img.save()

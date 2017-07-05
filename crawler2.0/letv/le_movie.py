@@ -57,15 +57,14 @@ class LeTvMovie:
 			return None
 
 		about = cls.get_about(d)
-
-		video = d['videoList'][0]
+		video =  d['videoList'][0]
 		
 		m = {'name': d['name'], 'time': d['releaseDate'], 'online_url': video['url'], 'source': ""}
 		
 		# "id": model["id"],
 		result = {"name": d['name'], "sub_name": d['subname'],
 		          "rating": 0, "rating_sum": 0,
-		          "image_url": video['images']['300*400'],
+		          "image_url":  d['images']['120*160'],
 		          "about": about,
 		          "content": d['description'], "comments": [], "area": d['areaName'],
 		          "images": None, 'score': d['rating']}

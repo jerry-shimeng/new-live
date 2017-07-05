@@ -30,13 +30,6 @@ class ProductCommentInfo(BaseModel):
 		db_table = 'product_comment_info'
 
 
-class ProductImagesDetail(BaseModel):
-	image = IntegerField(db_column='image_id', index=True)
-	product = IntegerField(db_column='product_id', index=True)
-	
-	class Meta:
-		db_table = 'product_images_detail'
-
 
 class ProductInfo(BaseModel):
 	create_time = DateTimeField()
@@ -123,10 +116,10 @@ class PublicDownloadAddress(BaseModel):
 
 class PublicImages(BaseModel):
 	create_time = DateTimeField()
-	image = CharField()
+	image = TextField()
 	img_type = IntegerField()
 	status = IntegerField()
-	
+	product = IntegerField(db_column='product_id')
 	class Meta:
 		db_table = 'public_images'
 
