@@ -10,7 +10,9 @@ class Downloads:
 		details = PublicDownloadDAL.get_address(id)
 		details = list(details)
 		
-		return result.of(json.loads(details))
+		details = list(map(lambda x: {"url": json.loads(x['download_url']), 'type': x['download_type']}, details))
+		
+		return result.of(details)
 
 
 class Comments:

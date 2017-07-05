@@ -1,7 +1,7 @@
 from playhouse.shortcuts import model_to_dict
 
 from dal import models
-from dal.models import ProductInfo, ProductMovieDetail, ProductImagesDetail, PublicImages, \
+from dal.models import ProductInfo, ProductMovieDetail , PublicImages, \
 	PublicDownloadAddress, ProductCommentDetail, ProductCommentInfo
 
 
@@ -26,14 +26,10 @@ class ProductInfoDal:
 	
 	@classmethod
 	def get_img(cls, pid):
-		d = []
-		imgs = ProductImagesDetail.filter(ProductImagesDetail.product == pid)
-		for img in imgs:
-			temp = PublicImages.get(PublicImages.id == img.image)
-			
-			img_url = temp.image.replace(".webp", ".jpg")
-			d.append({"url": img_url, "type": temp.img_type})
-		return d
+		temp = PublicImages.get(PublicImages.product == pid)
+		
+		img_url = temp.image.replace(".webp", ".jpg")
+		return {"url": img_url, "type": temp.img_type}
 	
 	@classmethod
 	def query(cls, args):

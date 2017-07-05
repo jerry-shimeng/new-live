@@ -51,7 +51,7 @@ class Products:
 		res = {
 			'id': pro['id'],
 			'area': detail['area'],
-			'img': cls.get_main_image(ProductInfoDal.get_img(pid)),
+			'img': ProductInfoDal.get_img(pid),
 			'name': detail['product_name'],
 			'alias': detail['product_alias'],
 			'summary': detail['content'],
@@ -127,14 +127,6 @@ class Products:
 			if 'average' in d.keys():
 				return d['average']
 		return 0
-	
-	@classmethod
-	def get_main_image(cls, ll: list):
-		l = filter(lambda x: x['type'] == 1, ll)
-		l = list(l)
-		if len(l) > 0:
-			return l[0]['url']
-		return ''
 	
 	@classmethod
 	def get_order_field(cls, order=1):

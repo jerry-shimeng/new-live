@@ -1,6 +1,7 @@
 from peewee import *
 from config import database, db_name
-from playhouse.shortcuts import RetryOperationalError
+
+from playhouse.pool import PooledMySQLDatabase
 
 import logging
 
@@ -8,15 +9,14 @@ logger = logging.getLogger('peewee')
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
+# class MyRetryDB(RetryOperationalError, MySQLDatabase):
+# 	"""
+# 	自动重连
+# 	"""
+# 	pass
+#
 
-class MyRetryDB(RetryOperationalError, MySQLDatabase):
-	"""
-	自动重连
-	"""
-	pass
-
-
-database = MyRetryDB(db_name, **database)
+database = PooledMySQLDatabase(db_name, **database, max_connections=10)
 
 
 class UnknownField(object):
@@ -53,12 +53,7 @@ class ProductCommentInfo(BaseModel):
 # 		db_table = 'product_download_detail'
 
 
-class ProductImagesDetail(BaseModel):
-	image = IntegerField(db_column='image_id', index=True)
-	product = IntegerField(db_column='product_id', index=True)
-	
-	class Meta:
-		db_table = 'product_images_detail'
+
 
 
 class ProductInfo(BaseModel):
@@ -149,6 +144,7 @@ class PublicImages(BaseModel):
 	image = CharField()
 	img_type = IntegerField()
 	status = IntegerField()
+	product = IntegerField(db_column='product_id')
 	
 	class Meta:
 		db_table = 'public_images'
